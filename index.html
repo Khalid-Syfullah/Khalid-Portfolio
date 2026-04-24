@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Khalid Syfullah – Portfolio</title>
+  <meta name="description" content="Portfolio of Khalid Syfullah, Electrical & Computer Engineering graduate and software developer." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles/main.css" />
+  <script defer src="scripts/main.js"></script>
+</head>
+<body>
+
+  <!-- Sticky Navbar -->
+  <nav class="topnav" id="topnav" aria-label="Site navigation">
+    <div class="topnav-inner">
+      <span class="topnav-logo">KS</span>
+      <div class="topnav-links">
+        <a href="index.html#about">About</a>
+        <a href="index.html#education">Education</a>
+        <a href="index.html#experience">Experience</a>
+        <a href="index.html#skills">Skills</a>
+        <a href="index.html#projects">Projects</a>
+        <a href="index.html#achievements">Awards</a>
+        <a href="index.html#leadership">Leadership</a>
+        <a href="index.html#certifications">Certifications</a>
+        <a href="index.html#contact">Contact</a>
+      </div>
+      <button id="theme-toggle" aria-label="Toggle light/dark theme">
+        <span class="theme-icon"></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <header class="hero">
+    <div class="hero-content">
+      <div class="hero-badge">Available for opportunities</div>
+      <h1 class="hero-name">Khalid<br/><span class="accent-text">Syfullah</span></h1>
+      <p class="hero-subtitle">B.Sc. Engg. (ECE) &mdash; <span id="typed"></span></p>
+      <div class="hero-cta">
+        <a href="index.html#contact" class="btn btn-primary">Get in Touch</a>
+        <a href="index.html#projects" class="btn btn-ghost">View Projects</a>
+      </div>
+      <div class="hero-socials">
+        <a href="https://github.com/khalidsyfullah" target="_blank" rel="noopener" aria-label="GitHub">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+        </a>
+        <a href="https://linkedin.com/in/khalid-syfullah" target="_blank" rel="noopener" aria-label="LinkedIn">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+        </a>
+        <a href="mailto:khalidsyfullah@gmail.com" aria-label="Email">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M24 5.457v13.909c0 .904-.732 1.636-1.636 1.636h-3.819V11.73L12 16.64l-6.545-4.91v9.273H1.636A1.636 1.636 0 0 1 0 19.366V5.457c0-2.023 2.309-3.178 3.927-1.964L5.455 4.64 12 9.548l6.545-4.910 1.528-1.145C21.69 2.28 24 3.434 24 5.457z"/></svg>
+        </a>
+      </div>
+    </div>
+    <div class="hero-scroll-hint" aria-hidden="true">
+      <span></span>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- About -->
+    <section id="about" class="section card">
+      <h2 class="section-title">About Me</h2>
+      <div class="about-grid">
+        <div class="about-text">
+          <p>Passionate software developer with hands-on experience in Android, web, and AI/ML. I enjoy turning complex ideas into polished, performant applications — from low-level embedded systems to full-stack web platforms.</p>
+          <p>I value clean code and clear communication.</p>
+        </div>
+        <div class="about-stats">
+          <div class="stat">
+            <span class="stat-number">3+</span>
+            <span class="stat-label">Years Experience</span>
+          </div>
+          <div class="stat">
+            <span class="stat-number">13+</span>
+            <span class="stat-label">Projects Shipped</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Education -->
+    <section id="education" class="section card">
+      <h2 class="section-title">Education</h2>
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-content">
+            <div class="timeline-header">
+              <h3>B.Sc. Engg. in Electrical &amp; Computer Engineering</h3>
+              <span class="timeline-date">Jan 2017 – Apr 2024</span>
+            </div>
+            <p class="timeline-org">Rajshahi University of Engineering &amp; Technology (RUET)</p>
+            <div class="timeline-tags">
+              <span class="tag">CGPA: 3.30 / 4.00</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- B.Sc. Thesis -->
+    <section id="thesis" class="section card">
+      <h2 class="section-title">B.Sc. Thesis</h2>
+      <div class="pub-item">
+        <div class="pub-badge">2024</div>
+        <div class="pub-body">
+          <h3>BOIMELA: Development of An EPUB3 Reader with Multilingual EBook Store, OAuth 2.0 API and MVVM Architecture</h3>
+          <p class="pub-venue">M. K. Syfullah &mdash; Dept. of ECE, RUET</p>
+          <ul style="color:var(--text-muted);font-size:0.88rem;padding-left:1.2rem;margin:0.5rem 0 0.75rem;">
+            <li><strong>EPUB3 Support:</strong> Modern in-app reading in English and Bangla with reflowable layout, chapter navigation, progress monitoring, and light/dark modes.</li>
+            <li><strong>MVVM Architecture &amp; OAuth 2.0:</strong> Structured e-book collection using MVVM for performance and scalability. Secure API access with OAuth 2.0 authentication and administrative functions.</li>
+          </ul>
+          <div class="skill-tags">
+            <span class="skill-tag">Android</span>
+            <span class="skill-tag">EPUB3</span>
+            <span class="skill-tag">MVVM</span>
+            <span class="skill-tag">OAuth 2.0</span>
+            <span class="skill-tag">Node.js</span>
+            <span class="skill-tag">React</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Experience -->
+    <section id="experience" class="section card">
+      <h2 class="section-title">Work Experience</h2>
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-content">
+            <div class="timeline-header">
+              <h3>Software Developer</h3>
+              <span class="timeline-date">Apr 2021 – Dec 2021</span>
+            </div>
+            <p class="timeline-org">Qubitech Solutions &mdash; <em>Rajshahi, Bangladesh</em></p>
+            <ul>
+              <li>Led development of 4 projects at Qubitech Solutions, fueling startup growth and technological advancement.</li>
+              <li>Collaborated with 2 startup clients, contributing to the development of Native Android apps and web platforms.</li>
+              <li>Worked closely with CEO Mr. Mahir Ashef and a team of 6 front-end, back-end, and Android developers, achieving a large reduction in development time.</li>
+            </ul>
+            <p style="margin:0.6rem 0 0.3rem;font-weight:600;font-size:0.9rem;">Developed Projects:</p>
+            <ul>
+              <li>OBOSOR, Community &amp; Campus-based Online Book Shop</li>
+              <li>BERGER, Data Collector App</li>
+            </ul>
+            <div class="timeline-tags">
+              <span class="tag">Android</span>
+              <span class="tag">Web</span>
+              <span class="tag">Team Lead</span>
+            </div>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-content">
+            <div class="timeline-header">
+              <h3>Industrial Attachment</h3>
+              <span class="timeline-date">Apr 2021 – Jun 2021</span>
+            </div>
+            <p class="timeline-org">MonstarLab Bangladesh &mdash; <em>Dhaka, Bangladesh (Remote)</em></p>
+            <ul>
+              <li>Analyzed all SDLC phases, requirements analysis, database optimization schemas, and OOP principles for 2 projects.</li>
+              <li>Analyzed 4 design patterns and 2 development frameworks (AngularJS and Native Android) for platform development.</li>
+              <li>Learned beta testing to ensure product quality assurance, and Git for version control.</li>
+            </ul>
+            <p style="margin:0.6rem 0 0.3rem;font-weight:600;font-size:0.9rem;">Developed Projects:</p>
+            <ul>
+              <li>Angular Front-end, Blog Web Application — <a href="https://github.com/Khalid-Syfullah/Angular-Blog-Web-Application" target="_blank" rel="noopener" class="project-link">GitHub →</a></li>
+              <li>Node.js Back-end, Blog Web Application — <a href="https://github.com/Khalid-Syfullah/Nodejs-Blog-Web-Application-Backend" target="_blank" rel="noopener" class="project-link">GitHub →</a></li>
+            </ul>
+            <div class="timeline-tags">
+              <span class="tag">AngularJS</span>
+              <span class="tag">Android</span>
+              <span class="tag">SDLC</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Skills -->
+    <section id="skills" class="section card">
+      <h2 class="section-title">Technical Skills</h2>
+      <div class="skills-grid">
+        <div class="skill-group">
+          <h3>Languages</h3>
+          <div class="skill-tags">
+            <span class="skill-tag">Java</span>
+            <span class="skill-tag">C++</span>
+            <span class="skill-tag">JavaScript</span>
+            <span class="skill-tag">Python</span>
+            <span class="skill-tag">HTML5</span>
+            <span class="skill-tag">CSS3</span>
+            <span class="skill-tag">PHP</span>
+            <span class="skill-tag">XML</span>
+          </div>
+        </div>
+        <div class="skill-group">
+          <h3>Mobile App</h3>
+          <div class="skill-tags">
+            <span class="skill-tag">Android Native</span>
+            <span class="skill-tag">Java + XML</span>
+            <span class="skill-tag">Firebase Auth</span>
+            <span class="skill-tag">Retrofit</span>
+            <span class="skill-tag">TensorFlow Lite</span>
+          </div>
+        </div>
+        <div class="skill-group">
+          <h3>Back-end</h3>
+          <div class="skill-tags">
+            <span class="skill-tag">Node.js</span>
+            <span class="skill-tag">Express</span>
+            <span class="skill-tag">Mongoose</span>
+            <span class="skill-tag">JWT</span>
+            <span class="skill-tag">Bcryptjs</span>
+            <span class="skill-tag">Multer</span>
+            <span class="skill-tag">Chai</span>
+            <span class="skill-tag">Mocha</span>
+            <span class="skill-tag">Jest</span>
+          </div>
+        </div>
+        <div class="skill-group">
+          <h3>Front-end</h3>
+          <div class="skill-tags">
+            <span class="skill-tag">React</span>
+            <span class="skill-tag">Redux</span>
+            <span class="skill-tag">Tailwind CSS</span>
+            <span class="skill-tag">Bootstrap 5</span>
+            <span class="skill-tag">Axios</span>
+          </div>
+        </div>
+        <div class="skill-group">
+          <h3>Database</h3>
+          <div class="skill-tags">
+            <span class="skill-tag">MongoDB</span>
+            <span class="skill-tag">MySQL</span>
+            <span class="skill-tag">Firebase</span>
+            <span class="skill-tag">SQLite</span>
+          </div>
+        </div>
+        <div class="skill-group">
+          <h3>Cloud</h3>
+          <div class="skill-tags">
+            <span class="skill-tag">AWS (EC2, Route 53)</span>
+            <span class="skill-tag">GCP (Compute Engine)</span>
+            <span class="skill-tag">CPanel</span>
+          </div>
+        </div>
+        <div class="skill-group">
+          <h3>Linux</h3>
+          <div class="skill-tags">
+            <span class="skill-tag">Apache</span>
+            <span class="skill-tag">Vsftpd</span>
+            <span class="skill-tag">Nginx</span>
+            <span class="skill-tag">Bind</span>
+            <span class="skill-tag">Git</span>
+            <span class="skill-tag">Bash</span>
+            <span class="skill-tag">Docker</span>
+          </div>
+        </div>
+        <div class="skill-group">
+          <h3>Tools</h3>
+          <div class="skill-tags">
+            <span class="skill-tag">Postman</span>
+            <span class="skill-tag">GitHub</span>
+            <span class="skill-tag">SSH</span>
+            <span class="skill-tag">Trello</span>
+            <span class="skill-tag">ClickUp</span>
+            <span class="skill-tag">DeskTime</span>
+          </div>
+        </div>
+        <div class="skill-group">
+          <h3>CMS</h3>
+          <div class="skill-tags">
+            <span class="skill-tag">WordPress</span>
+            <span class="skill-tag">Shopify</span>
+          </div>
+        </div>
+        <div class="skill-group">
+          <h3>UI / UX</h3>
+          <div class="skill-tags">
+            <span class="skill-tag">Adobe XD</span>
+            <span class="skill-tag">Figma</span>
+            <span class="skill-tag">Adobe Illustrator</span>
+          </div>
+        </div>
+        <div class="skill-group">
+          <h3>IDE</h3>
+          <div class="skill-tags">
+            <span class="skill-tag">VS Code</span>
+            <span class="skill-tag">Android Studio</span>
+            <span class="skill-tag">Antigravity</span>
+            <span class="skill-tag">Anaconda</span>
+            <span class="skill-tag">Jupyter</span>
+          </div>
+        </div>
+        <div class="skill-group">
+          <h3>ML / DL</h3>
+          <div class="skill-tags">
+            <span class="skill-tag">NumPy</span>
+            <span class="skill-tag">Pandas</span>
+            <span class="skill-tag">Scikit-Learn</span>
+            <span class="skill-tag">TensorFlow</span>
+            <span class="skill-tag">PyTorch</span>
+            <span class="skill-tag">SHAP</span>
+            <span class="skill-tag">LIME</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Projects -->
+    <section id="projects" class="section card">
+      <h2 class="section-title">Selected Projects</h2>
+      <div class="projects-grid">
+        <div class="project-card">
+          <div class="project-icon">📚</div>
+          <h3>BOIMELA</h3>
+          <p>Mobile EPUB3 reader with multilingual e-book store, bookmarking, and user library management.</p>
+          <div class="skill-tags">
+            <span class="skill-tag">Android</span><span class="skill-tag">Java</span><span class="skill-tag">MVVM</span><span class="skill-tag">Mobile App</span>
+          </div>
+          <a href="https://github.com/Khalid-Syfullah/BOIMELA" target="_blank" rel="noopener" class="project-link">GitHub →</a>
+        </div>
+        <div class="project-card">
+          <div class="project-icon">🔌</div>
+          <h3>BOIMELA Back-end</h3>
+          <p>Node.js REST API supporting the Boimela app — user auth, book management, and purchase transactions.</p>
+          <div class="skill-tags">
+            <span class="skill-tag">Node.js</span><span class="skill-tag">Express</span><span class="skill-tag">MongoDB</span><span class="skill-tag">Back-end</span>
+          </div>
+          <a href="https://github.com/Khalid-Syfullah/BOIMELA-Backend" target="_blank" rel="noopener" class="project-link">GitHub →</a>
+        </div>
+        <div class="project-card">
+          <div class="project-icon">🛒</div>
+          <h3>BOIMELA Web</h3>
+          <p>React web app for the Boimela e-book store — browse, purchase, and read eBooks online.</p>
+          <div class="skill-tags">
+            <span class="skill-tag">React</span><span class="skill-tag">JavaScript</span><span class="skill-tag">Website</span>
+          </div>
+          <a href="https://github.com/Khalid-Syfullah/BOIMELA-Web" target="_blank" rel="noopener" class="project-link">GitHub →</a>
+        </div>
+        <div class="project-card">
+          <div class="project-icon">🩸</div>
+          <h3>PLASMA+</h3>
+          <p>Android platform connecting plasma and blood donors with recipients, with AI-assisted COVID-19 detection from chest X-rays.</p>
+          <div class="skill-tags">
+            <span class="skill-tag">Android</span><span class="skill-tag">AI/ML</span><span class="skill-tag">Mobile App</span>
+          </div>
+          <a href="https://github.com/Khalid-Syfullah/PLASMA-Plus" target="_blank" rel="noopener" class="project-link">GitHub →</a>
+        </div>
+        <div class="project-card">
+          <div class="project-icon">🏠</div>
+          <h3>VFloors360-Client</h3>
+          <p>Immersive 360° VR room visualization platform to explore tile catalogs in realistic environments.</p>
+          <div class="skill-tags">
+            <span class="skill-tag">React</span><span class="skill-tag">VR</span><span class="skill-tag">Website</span>
+          </div>
+          <a href="https://github.com/Khalid-Syfullah/VFloors360-Client" target="_blank" rel="noopener" class="project-link">GitHub →</a>
+        </div>
+        <div class="project-card">
+          <div class="project-icon">⚙️</div>
+          <h3>VFloors360-Server</h3>
+          <p>RESTful Node.js backend with user authentication and tile management for the VR visualization platform.</p>
+          <div class="skill-tags">
+            <span class="skill-tag">Node.js</span><span class="skill-tag">MongoDB</span><span class="skill-tag">Back-end</span>
+          </div>
+          <a href="https://github.com/Khalid-Syfullah/VFloors360-Server" target="_blank" rel="noopener" class="project-link">GitHub →</a>
+        </div>
+        <div class="project-card">
+          <div class="project-icon">🔧</div>
+          <h3>VFloors360-Admin</h3>
+          <p>React admin dashboard for managing tile textures and VR platform configurations.</p>
+          <div class="skill-tags">
+            <span class="skill-tag">React</span><span class="skill-tag">Dashboard</span><span class="skill-tag">Website</span>
+          </div>
+          <a href="https://github.com/Khalid-Syfullah/VFloors360-Admin" target="_blank" rel="noopener" class="project-link">GitHub →</a>
+        </div>
+        <div class="project-card">
+          <div class="project-icon">✅</div>
+          <h3>Task Manager</h3>
+          <p>React task management app with real-time CRUD, Node.js/Express REST API, and MongoDB storage.</p>
+          <div class="skill-tags">
+            <span class="skill-tag">React</span><span class="skill-tag">Node.js</span><span class="skill-tag">MongoDB</span>
+          </div>
+          <a href="https://github.com/Khalid-Syfullah/Task-Manager" target="_blank" rel="noopener" class="project-link">GitHub →</a>
+        </div>
+        <div class="project-card">
+          <div class="project-icon">🕌</div>
+          <h3>Muslim Virtual Aid App</h3>
+          <p>Android Islamic app with Quran access, Salah times, mosque locations, Qibla direction, and Ramadan features — MVVM architecture.</p>
+          <div class="skill-tags">
+            <span class="skill-tag">Android</span><span class="skill-tag">Java</span><span class="skill-tag">MVVM</span>
+          </div>
+          <a href="https://github.com/Khalid-Syfullah/Muslim-Virtual-Aid-App" target="_blank" rel="noopener" class="project-link">GitHub →</a>
+        </div>
+        <div class="project-card">
+          <div class="project-icon">📖</div>
+          <h3>GrammarQuick for Android</h3>
+          <p>Educational Android app with grammar exercises and quizzes to enhance English language learning.</p>
+          <div class="skill-tags">
+            <span class="skill-tag">Android</span><span class="skill-tag">Java</span><span class="skill-tag">Mobile App</span>
+          </div>
+          <a href="https://github.com/Khalid-Syfullah/GrammarQuick" target="_blank" rel="noopener" class="project-link">GitHub →</a>
+        </div>
+        <div class="project-card">
+          <div class="project-icon">🫁</div>
+          <h3>CXR17-DenseParallel-ELM</h3>
+          <p>Android app using CNN with DenseParallel-ELM model to detect 17 lung diseases from chest X-rays.</p>
+          <div class="skill-tags">
+            <span class="skill-tag">Android</span><span class="skill-tag">CNN</span><span class="skill-tag">ML/DL</span>
+          </div>
+          <a href="https://github.com/Khalid-Syfullah/CXR17-DenseParallel-ELM" target="_blank" rel="noopener" class="project-link">GitHub →</a>
+        </div>
+        <div class="project-card">
+          <div class="project-icon">🌿</div>
+          <h3>Plant Disease Classifier</h3>
+          <p>CNN-based Android app to classify diseases in cotton and tomato plants from images.</p>
+          <div class="skill-tags">
+            <span class="skill-tag">Android</span><span class="skill-tag">CNN</span><span class="skill-tag">TensorFlow</span>
+          </div>
+          <a href="https://github.com/Khalid-Syfullah/Plant-Disease-Classifier" target="_blank" rel="noopener" class="project-link">GitHub →</a>
+        </div>
+        <div class="project-card">
+          <div class="project-icon">🏫</div>
+          <h3>ROPMS</h3>
+          <p>PHP-based student-teacher profile management system with profile creation, updates, and performance tracking.</p>
+          <div class="skill-tags">
+            <span class="skill-tag">PHP</span><span class="skill-tag">MySQL</span><span class="skill-tag">Website</span>
+          </div>
+          <a href="https://github.com/Khalid-Syfullah/ROPMS" target="_blank" rel="noopener" class="project-link">GitHub →</a>
+        </div>
+        <div class="project-card">
+          <div class="project-icon">📝</div>
+          <h3>Angular Blog (Front-end)</h3>
+          <p>Full-featured blog front-end with Angular, routing, and state management.</p>
+          <div class="skill-tags">
+            <span class="skill-tag">Angular</span><span class="skill-tag">TypeScript</span>
+          </div>
+          <a href="https://github.com/Khalid-Syfullah/Angular-Blog-Web-Application" target="_blank" rel="noopener" class="project-link">GitHub →</a>
+        </div>
+        <div class="project-card">
+          <div class="project-icon">🌐</div>
+          <h3>Node.js Blog API (Back-end)</h3>
+          <p>RESTful API for the blog platform with authentication, CRUD operations, and MongoDB.</p>
+          <div class="skill-tags">
+            <span class="skill-tag">Node.js</span><span class="skill-tag">Express</span><span class="skill-tag">MongoDB</span>
+          </div>
+          <a href="https://github.com/Khalid-Syfullah/Nodejs-Blog-Web-Application-Backend" target="_blank" rel="noopener" class="project-link">GitHub →</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Achievements & Awards -->
+    <section id="achievements" class="section card">
+      <h2 class="section-title">Achievements &amp; Awards</h2>
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-content">
+            <div class="timeline-header">
+              <h3>WINNER — IEEE YESIST12 2020, Special Track</h3>
+              <span class="timeline-date">Sep 2020</span>
+            </div>
+            <p class="timeline-org">PLASMA+ &mdash; <em>Malaysia</em></p>
+            <ul>
+              <li>AI-based Blood and Plasma banking mobile app facilitating COVID-19 detection from chest X-ray images and connecting donors and patients nationwide.</li>
+            </ul>
+            <div class="timeline-tags">
+              <span class="tag">IEEE YESIST12</span><span class="tag">AI/ML</span><span class="tag">Android</span>
+            </div>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-content">
+            <div class="timeline-header">
+              <h3>2nd Runner-up — Virtual Project Competition on ICT, IICT, RUET</h3>
+              <span class="timeline-date">Dec 2020</span>
+            </div>
+            <p class="timeline-org">PLASMA+ &mdash; <em>Bangladesh</em></p>
+            <ul>
+              <li>DL-based lightweight lung-affected disease recognition app with COVID-19 detection.</li>
+            </ul>
+            <div class="timeline-tags">
+              <span class="tag">RUET</span><span class="tag">Deep Learning</span>
+            </div>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-content">
+            <div class="timeline-header">
+              <h3>Extraordinary Achievement — Distinguished Achievements Award, ECE, RUET</h3>
+              <span class="timeline-date">Oct 2019</span>
+            </div>
+            <p class="timeline-org">IoT Based Multi-layered Security &amp; Automated Monitoring System &mdash; <em>Bangladesh</em></p>
+            <ul>
+              <li>IoT-based sustainable solution for a multi-layered security system for home and office at minimum cost with monitoring and alarm.</li>
+            </ul>
+            <div class="timeline-tags">
+              <span class="tag">IoT</span><span class="tag">ECE RUET</span>
+            </div>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-content">
+            <div class="timeline-header">
+              <h3>Most Popular Project Award — IEEE YESIST12 2019, Maker Fair Track</h3>
+              <span class="timeline-date">Sep 2019</span>
+            </div>
+            <p class="timeline-org">IoT based Monitoring Car Robot for Disaster Management &mdash; <em>Thailand</em></p>
+            <ul>
+              <li>IoT-based robot car for disaster management that detects environmental parameters and transmits vital information to a central host, enabling efficient rescue operations.</li>
+            </ul>
+            <div class="timeline-tags">
+              <span class="tag">IEEE YESIST12</span><span class="tag">IoT</span><span class="tag">Robotics</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Leadership / Extracurricular -->
+    <section id="leadership" class="section card">
+      <h2 class="section-title">Leadership &amp; Extracurricular</h2>
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-content">
+            <div class="timeline-header">
+              <h3>Medspire — IEEE R10 HAC Special Project</h3>
+              <span class="timeline-date">May 2020 – Mar 2021</span>
+            </div>
+            <p class="timeline-org">IEEE Region 10 &amp; IEEE HAC Special Call for Projects (R10-HTA-021) &mdash; <em>Rajshahi, Bangladesh</em></p>
+            <ul>
+              <li>Addressed local needs during COVID time by proposing and developing a telemedicine platform for Android to establish seamless patient-doctor interaction.</li>
+              <li>Participated in a high-profile startup pitching competition.</li>
+            </ul>
+            <p style="margin:0.6rem 0 0.3rem;font-weight:600;font-size:0.9rem;">Developed Projects:</p>
+            <ul>
+              <li>PLASMA+, Plasma &amp; Blood Banking Platform — <a href="https://github.com/Khalid-Syfullah/PLASMA-Plus" target="_blank" rel="noopener" class="project-link">GitHub →</a></li>
+              <li>E-DOCTORS, Mobile Telemedicine Platform for Android — <a href="https://github.com/Khalid-Syfullah" target="_blank" rel="noopener" class="project-link">GitHub →</a></li>
+            </ul>
+            <div class="timeline-tags">
+              <span class="tag">IEEE R10</span><span class="tag">Android</span><span class="tag">Telemedicine</span>
+            </div>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-content">
+            <div class="timeline-header">
+              <h3>Organizing Committee Member</h3>
+              <span class="timeline-date">Dec 2019</span>
+            </div>
+            <p class="timeline-org">Hult Prize at RUET, 2019–20 &mdash; <em>Hult Prize Foundation</em></p>
+            <ul>
+              <li>Managed communications between event sponsors and organizers.</li>
+              <li>Interacted with the judges' panel during the competition.</li>
+            </ul>
+            <div class="timeline-tags">
+              <span class="tag">Hult Prize</span><span class="tag">Leadership</span>
+            </div>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-content">
+            <div class="timeline-header">
+              <h3>Web Developer</h3>
+              <span class="timeline-date">Jun 2019</span>
+            </div>
+            <p class="timeline-org">Technocracy 2019 &mdash; <em>Department of ECE, RUET</em></p>
+            <ul>
+              <li>Developed an event management website for the technical organization of Technocracy 2019.</li>
+            </ul>
+            <div class="timeline-tags">
+              <span class="tag">Web Development</span><span class="tag">ECE RUET</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Certifications -->
+    <section id="certifications" class="section card">
+      <h2 class="section-title">Certifications</h2>
+      <div class="pub-list">
+        <div class="pub-item">
+          <div class="pub-badge">2023</div>
+          <div class="pub-body">
+            <h3>Machine Learning Specialization</h3>
+            <p class="pub-venue">University of Washington &mdash; Coursera &nbsp;|&nbsp; Credential ID: KJ5PZ6VVX4NS</p>
+            <div class="skill-tags">
+              <span class="skill-tag">Machine Learning</span><span class="skill-tag">Coursera</span>
+            </div>
+            <a href="https://www.coursera.org/account/accomplishments/specialization/certificate/KJ5PZ6VVX4NS" target="_blank" rel="noopener" class="project-link" style="margin-top:0.5rem;">View Credential →</a>
+          </div>
+        </div>
+        <div class="pub-item">
+          <div class="pub-badge">2023</div>
+          <div class="pub-body">
+            <h3>Reinforcement Learning Specialization</h3>
+            <p class="pub-venue">University of Alberta &mdash; Coursera &nbsp;|&nbsp; Credential ID: VVN725H2W3SK</p>
+            <div class="skill-tags">
+              <span class="skill-tag">Reinforcement Learning</span><span class="skill-tag">Coursera</span>
+            </div>
+            <a href="https://www.coursera.org/account/accomplishments/specialization/certificate/VVN725H2W3SK" target="_blank" rel="noopener" class="project-link" style="margin-top:0.5rem;">View Credential →</a>
+          </div>
+        </div>
+        <div class="pub-item">
+          <div class="pub-badge">2023</div>
+          <div class="pub-body">
+            <h3>Self-Driving Cars Specialization</h3>
+            <p class="pub-venue">University of Toronto &mdash; Coursera &nbsp;|&nbsp; Credential ID: N2ZKC5FNBR95</p>
+            <div class="skill-tags">
+              <span class="skill-tag">Self-Driving Cars</span><span class="skill-tag">Coursera</span>
+            </div>
+            <a href="https://www.coursera.org/account/accomplishments/specialization/certificate/N2ZKC5FNBR95" target="_blank" rel="noopener" class="project-link" style="margin-top:0.5rem;">View Credential →</a>
+          </div>
+        </div>
+        <div class="pub-item">
+          <div class="pub-badge">2018</div>
+          <div class="pub-body">
+            <h3>Basic Game Development Workshop 2018</h3>
+            <p class="pub-venue">Dept. of Computer Science &amp; Engineering, RUET &mdash; <em>Rajshahi, Bangladesh</em></p>
+            <div class="skill-tags">
+              <span class="skill-tag">Game Development</span><span class="skill-tag">RUET</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact -->
+    <section id="contact" class="section card">
+      <h2 class="section-title">Get In Touch</h2>
+      <p class="contact-intro">I'm always open to discussing new opportunities or just a friendly chat. Reach out through any of the channels below.</p>
+      <div class="contact-grid">
+        <a href="mailto:khalidsyfullah@gmail.com" class="contact-card">
+          <div class="contact-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          </div>
+          <span class="contact-label">Email</span>
+          <span class="contact-value">khalidsyfullah@gmail.com</span>
+        </a>
+        <a href="https://linkedin.com/in/khalid-syfullah" target="_blank" rel="noopener" class="contact-card">
+          <div class="contact-icon">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+          </div>
+          <span class="contact-label">LinkedIn</span>
+          <span class="contact-value">khalid-syfullah</span>
+        </a>
+        <a href="https://github.com/khalidsyfullah" target="_blank" rel="noopener" class="contact-card">
+          <div class="contact-icon">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+          </div>
+          <span class="contact-label">GitHub</span>
+          <span class="contact-value">khalidsyfullah</span>
+        </a>
+        <a href="https://leetcode.com/u/khalid_syfullah/" target="_blank" rel="noopener" class="contact-card">
+          <div class="contact-icon">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M13.483 0a1.374 1.374 0 0 0-.961.438L7.116 6.226l-3.854 4.126a5.266 5.266 0 0 0-1.209 2.104 5.35 5.35 0 0 0-.125.513 5.527 5.527 0 0 0 .062 2.362 5.83 5.83 0 0 0 .349 1.017 5.938 5.938 0 0 0 1.271 1.818l4.277 4.193.039.038c2.248 2.165 5.852 2.133 8.063-.074l2.396-2.392c.54-.54.54-1.414.003-1.955a1.378 1.378 0 0 0-1.951-.003l-2.396 2.392a3.021 3.021 0 0 1-4.205.038l-.02-.019-4.276-4.193c-.652-.64-.972-1.469-.948-2.263a2.68 2.68 0 0 1 .066-.523 2.545 2.545 0 0 1 .619-1.164L9.13 8.114c1.058-1.134 3.204-1.27 4.43-.278l3.501 2.831c.593.48 1.461.387 1.94-.207a1.384 1.384 0 0 0-.207-1.943l-3.5-2.831c-.8-.647-1.766-1.045-2.774-1.202l2.015-2.158A1.384 1.384 0 0 0 13.483 0zm-2.866 12.815a1.38 1.38 0 0 0-1.38 1.382 1.38 1.38 0 0 0 1.38 1.382H20.79a1.38 1.38 0 0 0 1.38-1.382 1.38 1.38 0 0 0-1.38-1.382z"/></svg>
+          </div>
+          <span class="contact-label">LeetCode</span>
+          <span class="contact-value">khalid_syfullah</span>
+        </a>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <p>Designed &amp; built by Khalid Syfullah &mdash; &copy; 2026 &nbsp;&middot;&nbsp; <a href="Resume.pdf" download="Khalid_Syfullah_Resume.pdf" style="color:inherit;text-decoration:underline;">Download Resume</a></p>
+  </footer>
+
+  <!-- Scroll-to-top -->
+  <button class="scroll-top" id="scroll-top" aria-label="Scroll to top">↑</button>
+
+</body>
+</html>
