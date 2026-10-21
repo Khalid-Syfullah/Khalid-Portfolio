@@ -11,3 +11,10 @@ khalidsyfullah.com: Md Khalid Syfullah's single-page portfolio (Software Enginee
 - **Content only from `docs/design/08-content.md`** (later `content/*.ts`). Never invent facts; mark unknowns `[KHALID: …]`.
 - **No academic content:** papers, IELTS/GRE, transcripts, certificates, HSC/SSC, CGPA, student leadership. No kernel / Chimera OS work and no blog.
 - **Deploys** go through GitHub Actions to AWS Lightsail (`docs/DEPLOY.md`). Never deploy by hand. Never touch other sites, mail or other config on that server.
+
+## Code notes
+
+- **Next.js 16 changed APIs.** Read `AGENTS.md` and the bundled docs in `node_modules/next/dist/docs/` before relying on older patterns. The site is a static export (`output: "export"`): no server features, no `next/image` optimizer.
+- **Type scale:** use the `type-display|h2|h3|lead|body|small|label|meta` utilities, never custom `text-*` sizes, because `cn` would read those as colours.
+- **Keep the first load light.** Overlays (command menu, case dialog, phone nav, toaster) and Motion pieces load via `next/dynamic`. Don't import them statically into sections.
+- **Before pushing:** `npm run lint` and `npm run build` must pass. For UI changes, check light and dark, phone and desktop.

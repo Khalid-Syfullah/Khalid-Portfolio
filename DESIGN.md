@@ -3,7 +3,7 @@
 The single entry point for how the new portfolio looks, reads and behaves.
 Build from these files. If code and spec disagree, fix the spec first, then the code.
 
-> **Status:** Phase 3 (Design), waiting on Khalid's review · **Updated:** 21 Oct 2026
+> **Status:** Design approved 21 Oct 2026 · Phase 5 (Build) in review as a pull request · **Updated:** 21 Oct 2026
 > **Plan:** [`docs/PLAN.md`](docs/PLAN.md)
 
 ---

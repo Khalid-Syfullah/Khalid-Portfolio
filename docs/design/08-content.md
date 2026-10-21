@@ -4,7 +4,8 @@
 
 The single source for every word and data point on the site. During the build it becomes `content/*.ts`.
 
-- Facts come from Khalid's CV and the old site. **Nothing is invented.**
+- Facts come from Khalid's CV and the old site (including its links). **Nothing is invented.**
+- **Still open** (shown on the site as dashed blue placeholders): BOIMELA and VFloors360 years; constraint/decision/outcome for VFloors360, PLASMA+ and OBOSOR; BOIMELA's constraint; OBOSOR and BERGER stacks; project screenshots; the software-engineering résumé PDF.
 - **[KHALID: …]** marks a fact only Khalid can supply. The build shows these as visible placeholders, and the review checklist blocks launch while any remain.
 - **Academic material is removed** (papers, IELTS/GRE, transcripts, certificates, HSC/SSC, CGPA, student leadership), and so are research-only projects.
 
@@ -22,10 +23,10 @@ The single source for every word and data point on the site. During the build it
 | `<title>` | Md Khalid Syfullah — Software Engineer |
 | Meta description | Software engineer building Android apps, Node.js back-ends and React front-ends. Based in Rajshahi, Bangladesh; open to roles in Bangladesh and remote. |
 | URL | https://khalidsyfullah.com |
-| Email | [KHALID: public email address for the site] |
+| Email | khalidsyfullah@gmail.com (the address the old site published) |
 | GitHub | https://github.com/Khalid-Syfullah |
-| LinkedIn | [KHALID: LinkedIn URL] |
-| LeetCode | [KHALID: LeetCode URL] |
+| LinkedIn | https://linkedin.com/in/khalid-syfullah |
+| LeetCode | https://leetcode.com/u/khalid_syfullah/ |
 | Résumé | `/resume/Md-Khalid-Syfullah-Resume.pdf` · [KHALID: software-engineering résumé PDF] |
 | Photos | `photo-portrait.jpg` (square headshot), `photo-outdoor.jpg` (outdoor, seated) |
 
@@ -74,7 +75,7 @@ The single source for every word and data point on the site. During the build it
 - *Decision:* MVVM architecture on Android for a structured, scalable app; one Node.js REST API secured with OAuth 2.0 that serves both the Android app and the React web store.
 - *Outcome:* Reflowable reading with chapter navigation, bookmarks, a personal library, reading progress, light and dark modes and rich media; API endpoints for authentication, book management and purchases. [KHALID: users, demo or other result]
 - *Stack:* Android · Java · XML · MVVM · Node.js · Express · OAuth 2.0 · React
-- *Links:* GitHub — app [KHALID], API [KHALID], web [KHALID]
+- *Links:* GitHub — [app](https://github.com/Khalid-Syfullah/Boimela), [API](https://github.com/Khalid-Syfullah/Boimela-Backend), [web store](https://github.com/Khalid-Syfullah/Boimela-Web)
 
 **2 · VFloors360** `vfloors360` · Web · Back-end · year [KHALID]
 - *Point of view:* Tile catalogues you can walk through: a 360° room viewer, its API and the admin that feeds it.
@@ -83,7 +84,7 @@ The single source for every word and data point on the site. During the build it
 - *Decision:* Three separate apps: the 360° viewer with dynamic scene loading, a Node.js REST API with authentication and tile management on MongoDB, and a React admin for textures and platform settings. [KHALID: why this split]
 - *Outcome:* [KHALID]
 - *Stack:* React · Node.js · Express · MongoDB
-- *Links:* GitHub — client [KHALID], server [KHALID], admin [KHALID]
+- *Links:* GitHub — [viewer](https://github.com/Khalid-Syfullah/VFloors360-Client), [API](https://github.com/Khalid-Syfullah/VFloors360-Server), [admin](https://github.com/Khalid-Syfullah/VFloors360-Admin)
 
 **3 · PLASMA+** `plasma-plus` · Android · 2020 · ★ Winner, IEEE YESIST12 2020
 - *Point of view:* A plasma and blood bank in your pocket that matches donors to patients during COVID-19.
@@ -91,27 +92,27 @@ The single source for every word and data point on the site. During the build it
 - *Constraint:* [KHALID]
 - *Decision:* [KHALID]
 - *Outcome:* Winner, IEEE YESIST12 2020 Special Track (Malaysia, Sep 2020); 2nd Runner-up, Virtual Project Competition on ICT, IICT RUET (Dec 2020).
-- *Stack:* Android · Java · [KHALID: back-end / ML stack]
-- *Links:* GitHub [KHALID]
+- *Stack:* Android · Java
+- *Links:* [GitHub](https://github.com/Khalid-Syfullah/plasmaplus)
 
 **4 · OBOSOR** `obosor` · Web · 2021 · built at Qubitech Solutions
 - *Point of view:* An online book shop for campus communities.
 - *Brief:* A community and campus-based online book shop.
 - *Constraint / Decision / Outcome:* [KHALID]
 - *Stack:* [KHALID]
-- *Links:* Website [KHALID]
+- *Links:* [Qubitech case study](https://qubitechsolutions.com.bd/case-studies/1)
 
 ### Archive
 
 | slug | Name | Type | Stack | Line | Link |
 |---|---|---|---|---|---|
-| `task-manager` | Task Manager | Web | React · Node.js · Express · MongoDB | Task app with real-time create, edit and delete | GitHub [KHALID] |
-| `muslim-virtual-aid` | Muslim Virtual Aid | Android | Java · XML · MVVM | Quran, prayer times, mosque finder, Qibla and Ramadan tools for Bangladesh | GitHub [KHALID] |
-| `e-doctors` | E-DOCTORS | Android | Java | Telemedicine app for patient–doctor contact, built for the IEEE R10 HAC special call during COVID-19 | GitHub [KHALID] |
-| `berger` | BERGER | Android | [KHALID] | Data collector app, built at Qubitech | Website [KHALID] |
-| `blog-app` | Blog app | Web · Back-end | Angular · Node.js | Blog front-end and API, built during the MonstarLab attachment | GitHub [KHALID] |
-| `grammarquick` | GrammarQuick | Android | Java | Grammar exercises and quizzes for English learners | GitHub [KHALID] |
-| `ropms` | ROPMS | Web | PHP · MySQL | Profile and performance tracking for students and teachers | GitHub [KHALID] |
+| `task-manager` | Task Manager | Web | React · Node.js · Express · MongoDB | Task app with real-time create, edit and delete | [GitHub](https://github.com/Khalid-Syfullah/React-Task-Management-Web-App) |
+| `muslim-virtual-aid` | Muslim Virtual Aid | Android | Java · XML · MVVM | Quran, prayer times, mosque finder, Qibla and Ramadan tools for Bangladesh | [GitHub](https://github.com/Khalid-Syfullah/Muslim-Virtual-Aid-App) |
+| `e-doctors` | E-DOCTORS | Android | Java | Telemedicine app for patient–doctor contact, built for the IEEE R10 HAC special call during COVID-19 | [GitHub](https://github.com/Khalid-Syfullah/e-doctors) |
+| `berger` | BERGER | Android | [KHALID] | Data collector app, built at Qubitech | [Case study](https://qubitechsolutions.com.bd/case-studies/3) |
+| `blog-app` | Blog app | Web · Back-end | Angular · Node.js | Blog front-end and API, built during the MonstarLab attachment | [front-end](https://github.com/Khalid-Syfullah/Angular-Blog-Web-Application), [API](https://github.com/Khalid-Syfullah/Nodejs-Blog-Web-Application-Backend) |
+| `grammarquick` | GrammarQuick | Android | Java | Grammar exercises and quizzes for English learners | [GitHub](https://github.com/Khalid-Syfullah/GrammarQuick) |
+| `ropms` | ROPMS | Web | PHP · MySQL | Profile and performance tracking for students and teachers | [GitHub](https://github.com/Khalid-Syfullah/ROPMS) |
 
 [KHALID: add Tuktak Bazaar and the ERP System? If yes, they go last.]
 

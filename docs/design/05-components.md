@@ -6,7 +6,9 @@ Built on **shadcn/ui** (Radix primitives plus Tailwind), restyled with the token
 
 ## shadcn/ui primitives to install
 
-`button` · `badge` · `command` (cmdk) · `dialog` · `drawer` (vaul, for the mobile command menu) · `sheet` (mobile nav) · `accordion` · `toggle-group` (filters) · `tooltip` · `sonner` (toasts) · `separator`
+`button` · `dialog` · `drawer` (vaul, for phone overlays) · `sheet` (phone nav) · `sonner` (toasts). The command menu uses `cmdk` directly, and the accordion and filter toggle group come straight from `radix-ui`, for full styling control.
+
+**Loaded on demand** (`next/dynamic`, never in the first load): the command menu panel, the case dialog, the phone nav sheet, the toaster, the reading-progress bar and the hover preview. See [`09-quality.md`](09-quality.md).
 
 ## Inventory
 
@@ -14,7 +16,8 @@ Built on **shadcn/ui** (Radix primitives plus Tailwind), restyled with the token
 |---|---|---|---|
 | `SiteHeader` | `components/site-header.tsx` | — | Wordmark, `NavLinks`, `CommandTrigger`, résumé button, `ThemeToggle`; mobile `Sheet` |
 | `NavLinks` | `components/nav-links.tsx` | — | Reads the active id from `useScrollSpy` |
-| `ReadingProgress` | `components/reading-progress.tsx` | Motion `useScroll` | 2px brand bar under the header |
+| `ReadingProgress` | `components/reading-progress.tsx` | Motion `useScroll` + `useSpring` | 2px brand bar under the header; loads when the browser is idle |
+| `MobileNav` | `components/mobile-nav.tsx` | `sheet` | Phone menu; loads on first tap |
 | `Section` | `components/section.tsx` | — | The two-column anatomy: `index`, `label`, `helper`, `children` |
 | `SectionLabel` | inside `Section` | — | `03 — EXPERIENCE` (mono label) plus helper text; sticky on lg |
 | `Hero` | `components/sections/hero.tsx` | — | |
@@ -22,10 +25,11 @@ Built on **shadcn/ui** (Radix primitives plus Tailwind), restyled with the token
 | `ExperienceList` | `components/sections/experience.tsx` | `accordion` | Single open, first open by default |
 | `ExperienceRow` | inside `ExperienceList` | `AccordionItem` | Trigger = full-width row; content = bullets plus `ProjectChip`s |
 | `WorkGrid` | `components/sections/work.tsx` | — | Featured `ProjectCard` ×4 plus `ProjectArchive` |
-| `ProjectCard` | `components/project-card.tsx` | `button` → `dialog` | Opens `CaseDialog` |
-| `CaseDialog` | `components/case-dialog.tsx` | `dialog` | brief / constraint / decision / outcome, images, links; URL hash sync |
-| `ProjectArchive` | `components/project-archive.tsx` | `toggle-group` | Filter chips plus ruled table / mobile list; `HoverPreview` |
-| `HoverPreview` | `components/hover-preview.tsx` | Motion | Cursor-following thumbnail, `pointer: fine` only |
+| `ProjectCard` | in `components/sections/work.tsx` | `<a href="#work/<slug>">` | A plain link (server-rendered, no JS); the case dialog listens for the hash |
+| `CaseDialogHost` | `components/case-dialog.tsx` | — | Syncs `#work/<slug>` ↔ dialog state, ←/→ keys; mounts the view lazily |
+| `CaseDialogView` | `components/case-dialog-view.tsx` | `dialog` / `drawer` | brief / constraint / decision / outcome, images, links |
+| `ProjectArchive` | `components/project-archive.tsx` | `toggle-group` | Filter chips plus ruled table / phone list over **all** projects (featured ones marked) |
+| `HoverPreview` | `components/hover-preview.tsx` | Motion springs | Cursor-following thumbnail, `pointer: fine` only; loads on first hover |
 | `SkillGroups` | `components/sections/skills.tsx` | `button` | Skill buttons filter the archive |
 | `Credentials` | `components/sections/credentials.tsx` | — | Three ruled lists |
 | `ContactFooter` | `components/contact-footer.tsx` | `button`, `sonner` | Email, copy-email, socials |
@@ -74,7 +78,7 @@ States: hover (primary: 8% lighter or darker; ghost: `bg-accent`), focus-visible
 └───────────────────────────────┘
 ```
 
-- The whole card is one `<button>` (opens the dialog). No nested links inside it.
+- The whole card is one link to `#work/<slug>`, which opens the dialog. Links are shareable and need no JavaScript. No nested links inside it.
 - Hover: border → `--input`, image scale 1.02 (inside an overflow-hidden frame), arrow +4px.
 
 ### CaseDialog
@@ -98,9 +102,9 @@ States: hover (primary: 8% lighter or darker; ghost: `bg-accent`), focus-visible
 
 ## Icons
 
-**lucide-react** for UI (search, sun, moon, arrow-up-right, plus, minus, copy, download, menu, x). Brand marks (GitHub, LinkedIn, LeetCode) come from **simple-icons** as inline SVGs, `aria-hidden` next to a text label. Never icon-only for links.
+**lucide-react** for UI (search, sun, moon, arrow-up-right, copy, download, menu, x, folder, hash, printer). Profile links (Email, LinkedIn, GitHub, LeetCode) are **text labels with ↗**, not brand logos: simpler, consistent with the mono style, and LinkedIn's mark isn't available in open icon sets. Never icon-only for links.
 
 ## Images
 
-- `public/images/photo-portrait.jpg` (square) and `photo-outdoor.jpg` (4:3 crop). Export AVIF plus WebP plus JPEG at 1×/2× and serve them with `<picture>` (static export means no Next image optimizer).
+- `public/images/photo-portrait-{192,480,960}` (square) and `photo-outdoor-{480,800,1100}` (4:3 crop), each as AVIF, WebP and JPEG, served with `<picture>` by the `Picture` component (static export means no Next image optimizer).
 - Project screenshots: `public/images/work/<slug>-1.webp`, 1600×1000.

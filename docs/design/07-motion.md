@@ -2,7 +2,9 @@
 
 ← [DESIGN.md](../../DESIGN.md) · Interactions: [`06-interactions.md`](06-interactions.md)
 
-Library: **Motion** (the current name of Framer Motion), imported from `motion/react`. Use `LazyMotion` with `domAnimation` features plus the `m.*` components, to keep the bundle small.
+Library: **Motion** (the current name of Framer Motion), imported from `motion/react`, for the **spring-driven** pieces: the reading-progress bar and the archive hover preview. Both live in lazily loaded components wrapped in `MotionScope` (`LazyMotion` + `domAnimation` + `MotionConfig reducedMotion="user"`), so Motion's code never ships in the first load.
+
+Everything else animates with **CSS**: the hero entrance (keyframes in `globals.css`), dialogs, drawers and the command menu (shadcn's `tw-animate-css` `data-state` animations), the nav underline, the accordion and the archive rows. That keeps the page light on phones.
 
 **Rule:** motion confirms an action or orients the eye. One orchestrated entrance on load; everything else is a response to the visitor.
 
@@ -31,37 +33,33 @@ export const spring = {
 } as const;
 ```
 
-## Load choreography (hero only, once)
+## Load choreography (hero only, once, pure CSS)
 
 ```
- t=0      header fades in (opacity 0→1, 200ms)
- t=80ms   headline line 1  y 16→0, opacity 0→1 (600ms, ease)
- t=120ms  headline line 2  …
- t=160ms  headline line 3  …
+ t=40ms   headline         y 16→0, transform only (600ms, ease); never transparent, it is the LCP text
  t=280ms  lead paragraph   opacity 0→1, y 8→0
  t=360ms  links + buttons  opacity 0→1
- t=360ms  photo            clip-path inset(0 0 100% 0) → inset(0) (600ms)
  t=700ms  availability dot single pulse
 ```
 
-- Headline lines come from a server-rendered split (one `<span>` per line, from content), not a client-side text splitter.
-- **The text is visible without JS:** the initial styles are applied only once JS hydrates (`initial={false}` on SSR, then animate). This avoids an LCP penalty.
+- The photo has no entrance animation: on phones it's a large paint, and a clip-path reveal held LCP back by seconds in testing.
+- CSS keyframes run before hydration, so nothing waits for JavaScript.
 - Below-the-fold sections don't animate on scroll. No "fade-up on every section". The only scroll-linked motion is the progress bar.
 
 ## Per element
 
 | Element | Motion |
 |---|---|
-| Nav underline | `layoutId="nav-underline"`, `spring.layout` |
-| Reading progress | `scaleX` from `useSpring(scrollYProgress, { stiffness: 200, damping: 40 })`, origin left |
+| Nav underline | CSS `scale-x` 0→1 from the left, 200ms |
+| Reading progress | **Motion**: `scaleX` from `useSpring(scrollYProgress, { stiffness: 200, damping: 40 })`, origin left; loads when idle |
 | Header rule | opacity 0→1 at scrollY > 8, `fast` |
-| Accordion | height auto via `AnimatePresence` + `m.div` `animate={{ height: "auto" }}` `expand`/`ease`; content opacity delayed 60ms; ± icon: the vertical bar `scaleY 1→0` |
+| Accordion | Radix `--radix-accordion-content-height` + `animate-accordion-down/up`; ± icon: the vertical bar `scaleY 1→0` (280ms) |
 | Project card hover | image `scale 1.02` (`base`), arrow `x 0→4` (`fast`), border colour (`fast`) |
-| Case dialog | overlay opacity 0→1 (`base`); panel `y 24→0, scale 0.98→1, opacity` (`expand`, `ease`); exit reversed with `ease-in` at 200ms |
-| Command menu | panel `scale 0.98→1, opacity` (`base`); items have no stagger (speed matters) |
-| Archive filter | rows `layout` + `AnimatePresence` (`initial={{opacity:0, y:6}}`), stagger 20ms, max 8 staggered |
-| Hover preview | `x/y` via `useSpring` (`spring.follow`); opacity in `fast`, out `base` |
-| Theme icon | rotate 90° + opacity crossfade, `fast` |
+| Case dialog / drawer | `tw-animate-css` fade + zoom (dialog) or vaul slide (drawer) |
+| Command menu | `tw-animate-css` fade + zoom; items have no stagger (speed matters) |
+| Archive filter | rows replay a CSS fade-in + 6px rise, stagger 20ms, max 8 staggered; no exit animation |
+| Hover preview | **Motion**: `x/y` via `useSpring` (`spring.follow`); `AnimatePresence` opacity in `fast`, out `base` |
+| Theme icon | icon swap, `fast` |
 | Toast | sonner defaults |
 
 ## Reduced motion
@@ -75,13 +73,16 @@ export const spring = {
 - The progress bar stays (it carries meaning) but without the spring.
 
 ```tsx
-<MotionConfig reducedMotion="user" transition={{ duration: t.base, ease }}>
-  {children}
-</MotionConfig>
+// components/motion-scope.tsx
+<LazyMotion features={domAnimation} strict>
+  <MotionConfig reducedMotion="user" transition={{ duration: t.base, ease }}>
+    {children}
+  </MotionConfig>
+</LazyMotion>
 ```
 
 ## Performance rules
 
 - Animate only `transform` and `opacity` (plus `clip-path` once, for the hero photo). Never width, height or top, except the accordion height, which is measured by Motion.
-- Every `motion` component lives in a client island. Sections stay server components and wrap only their interactive part.
+- Every Motion component lives in a lazily loaded client island (`next/dynamic`). Sections stay server components and wrap only their interactive part.
 - No animation runs while the tab is hidden; Motion handles this.
