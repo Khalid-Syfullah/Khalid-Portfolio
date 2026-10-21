@@ -143,10 +143,10 @@ Combine **layout 2 (Swiss résumé grid)** for experience, education and researc
 |---|---|---|
 | 1 Research | §1–2 of this doc | ✅ done |
 | 2 Plan | This doc | ✅ answered 21 Oct |
-| 3 Design | 3 visual directions on the design canvas, then the design spec: `DESIGN.md` + `docs/design/01–09` (base A · Résumé Sheet, C's command menu, B's dark ground) | Khalid approves the spec |
-| 4 Review | Revision rounds on the full design | Khalid signs off |
-| 5 Build | Next.js replaces CRA; content files, sections, interactions; delivered as a PR to `main` | PR reviewed |
-| 6 Optimize | Lighthouse, accessibility and SEO pass against §7, with a report | Targets met |
+| 3 Design | 3 visual directions on the design canvas, then the design spec: `DESIGN.md` + `docs/design/01–09` (base A · Résumé Sheet, C's command menu, B's dark ground) | ✅ approved 21 Oct |
+| 4 Review | Revision rounds on the full design | ✅ signed off 21 Oct |
+| 5 Build | Next.js replaces CRA; content files, sections, interactions; delivered as a PR to `main` | 🟡 PR open, waiting for review |
+| 6 Optimize | Lighthouse, accessibility and SEO pass against §7, with a report | 🟡 done in the same PR (desktop 100; see `design/09-quality.md`) |
 | 7 Deploy | GitHub Actions (`deploy.yml`, **already in the repo, switched off**): on push to `main`, build, upload over SSH to Lightsail as a new release, switch the `current` symlink, health-check, roll back on failure. Then `setup-server.sh remove-old` deletes the old site | Khalid approves the cut-over |
 
 ---

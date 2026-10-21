@@ -58,16 +58,18 @@ Loaded with `next/font/google` (self-hosted, `display: swap`, Latin subset).
 
 ### Scale
 
-| Token | Size | Line height | Tracking | Weight | Used for |
+Implemented as Tailwind `@utility type-*` classes, **not** `text-*`. The class merger (`cn`) would otherwise read a custom `text-small` as a colour and drop `text-primary-foreground` beside it.
+
+| Class | Size | Line height | Tracking | Weight | Used for |
 |---|---|---|---|---|---|
-| `text-display` | `clamp(2.75rem, 1.4rem + 5.2vw, 5.75rem)` (44→92px) | 1.02 | -0.035em | 700 | Hero headline only |
-| `text-h2` | `clamp(2rem, 1.5rem + 2vw, 3rem)` (32→48px) | 1.05 | -0.025em | 700 | Section titles, dialog titles |
-| `text-h3` | `1.5rem` (24px) | 1.2 | -0.01em | 600 | Row titles, card titles |
-| `text-lead` | `1.25rem` (20px) | 1.55 | 0 | 400 | Hero/About lead paragraph |
-| `text-body` | `1.0625rem` (17px) | 1.55 | 0 | 400 | Default |
-| `text-small` | `0.9375rem` (15px) | 1.5 | 0 | 400 | Nav, meta lists |
-| `text-label` | `0.8125rem` (13px), mono, uppercase | 1.4 | 0.04em | 500 | Section index `02 — EXPERIENCE` |
-| `text-meta` | `0.875rem` (14px), mono | 1.4 | 0 | 400 | Periods, kbd, chips |
+| `type-display` | `clamp(2.75rem, 1.4rem + 5.2vw, 5.75rem)` (44→92px) | 1.02 | -0.035em | 700 | Hero headline only |
+| `type-h2` | `clamp(2rem, 1.5rem + 2vw, 3rem)` (32→48px) | 1.05 | -0.025em | 700 | Section titles, dialog titles |
+| `type-h3` | `1.5rem` (24px) | 1.2 | -0.01em | 600 | Row titles, card titles |
+| `type-lead` | `1.25rem` (20px) | 1.55 | 0 | 400 | Hero/About lead paragraph |
+| `type-body` | `1.0625rem` (17px) | 1.55 | 0 | 400 | Default |
+| `type-small` | `0.9375rem` (15px) | 1.5 | 0 | 400 | Nav, meta lists |
+| `type-label` | `0.8125rem` (13px), mono, uppercase | 1.4 | 0.04em | 500 | Section index `02 — EXPERIENCE` |
+| `type-meta` | `0.875rem` (14px), mono | 1.4 | 0 | 400 | Periods, kbd, chips |
 
 - `text-wrap: balance` on headlines; `text-wrap: pretty` on paragraphs.
 - Body measure: 60–72 characters (`max-w-[38rem]` on paragraphs).
@@ -87,12 +89,12 @@ Loaded with `next/font/google` (self-hosted, `display: swap`, Latin subset).
 
 ## Radii, borders, elevation
 
-| Token | Value | Use |
+| Class | Value | Use |
 |---|---|---|
-| `--radius-sm` | 4px | Images |
-| `--radius` | 6px | Buttons, inputs |
-| `--radius-md` | 10px | Menu items, chips (pill chips use `9999px`) |
-| `--radius-lg` | 14px | Command menu panel, dialogs, cards |
+| `rounded-sm` | 4px | Images |
+| `rounded-md` | 6px | Buttons, inputs |
+| `rounded-lg` | 10px | Menu items (pill chips use `rounded-full`) |
+| `rounded-xl` | 14px | Command menu panel, dialogs, cards |
 | Border | 1px solid | Everything; 2px only for the focus ring |
 | `--shadow-pop` | `0 24px 48px -24px rgb(18 18 18 / 0.35)` | Command menu, dialog, toast only |
 
@@ -112,90 +114,12 @@ See [`07-motion.md`](07-motion.md). Short version: `fast 120ms`, `base 200ms`, `
 
 ---
 
-## Implementation: `app/globals.css`
+## Implementation
 
-```css
-@import "tailwindcss";
-@custom-variant dark (&:is(.dark *));
+`app/globals.css` is the implementation of this file, and the two must match:
 
-:root {
-  --background: #F3F3F0;  --foreground: #121212;
-  --card: #FFFFFF;        --card-foreground: #121212;
-  --popover: #FFFFFF;     --popover-foreground: #121212;
-  --primary: #121212;     --primary-foreground: #F3F3F0;   /* ink buttons */
-  --secondary: #EAEAE6;   --secondary-foreground: #121212;
-  --muted: #EAEAE6;       --muted-foreground: #5A5A55;
-  --accent: #E6EAFB;      --accent-foreground: #121212;    /* shadcn hover surface */
-  --destructive: #B42318;
-  --border: #D6D6D0;      --input: #85857E;      --ring: #2747D8;
-  --brand: #2747D8;       --brand-foreground: #FFFFFF;
-  --ink-2: #33332F;       --rule-strong: #121212;
-  --radius: 6px;
-  --gutter: clamp(20px, 4vw, 56px);
-  --section-y: clamp(56px, 8vw, 96px);
-  --shadow-pop: 0 24px 48px -24px rgb(18 18 18 / 0.35);
-}
-
-.dark {
-  --background: #0E0E0D;  --foreground: #EEEDE7;
-  --card: #171716;        --card-foreground: #EEEDE7;
-  --popover: #171716;     --popover-foreground: #EEEDE7;
-  --primary: #EEEDE7;     --primary-foreground: #0E0E0D;
-  --secondary: #1D1D1B;   --secondary-foreground: #EEEDE7;
-  --muted: #1D1D1B;       --muted-foreground: #9C9B93;
-  --accent: #1C2350;      --accent-foreground: #EEEDE7;
-  --border: #2B2B28;      --input: #6B6B65;      --ring: #7C93FF;
-  --brand: #7C93FF;       --brand-foreground: #0E0E0D;
-  --ink-2: #C9C8C0;       --rule-strong: #EEEDE7;
-  --shadow-pop: 0 24px 48px -24px rgb(0 0 0 / 0.7);
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-card: var(--card);               --color-card-foreground: var(--card-foreground);
-  --color-popover: var(--popover);         --color-popover-foreground: var(--popover-foreground);
-  --color-primary: var(--primary);         --color-primary-foreground: var(--primary-foreground);
-  --color-secondary: var(--secondary);     --color-secondary-foreground: var(--secondary-foreground);
-  --color-muted: var(--muted);             --color-muted-foreground: var(--muted-foreground);
-  --color-accent: var(--accent);           --color-accent-foreground: var(--accent-foreground);
-  --color-destructive: var(--destructive);
-  --color-border: var(--border);  --color-input: var(--input);  --color-ring: var(--ring);
-  --color-brand: var(--brand);    --color-brand-foreground: var(--brand-foreground);
-  --color-ink-2: var(--ink-2);    --color-rule-strong: var(--rule-strong);
-
-  --font-sans: var(--font-schibsted), "Helvetica Neue", Arial, sans-serif;
-  --font-mono: var(--font-plex-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
-
-  --text-display: clamp(2.75rem, 1.4rem + 5.2vw, 5.75rem);
-  --text-display--line-height: 1.02;
-  --text-display--letter-spacing: -0.035em;
-  --text-h2: clamp(2rem, 1.5rem + 2vw, 3rem);
-  --text-h2--line-height: 1.05;
-  --text-h2--letter-spacing: -0.025em;
-  --text-h3: 1.5rem;     --text-h3--line-height: 1.2;
-  --text-lead: 1.25rem;  --text-lead--line-height: 1.55;
-  --text-body: 1.0625rem; --text-body--line-height: 1.55;
-  --text-small: 0.9375rem;
-  --text-label: 0.8125rem; --text-label--letter-spacing: 0.04em;
-  --text-meta: 0.875rem;
-
-  --radius-sm: 4px;  --radius-md: 10px;  --radius-lg: 14px;
-  --shadow-pop: var(--shadow-pop);
-  --ease-out-soft: cubic-bezier(0.2, 0, 0, 1);
-}
-
-html { background: var(--background); color: var(--foreground); }
-body { font-family: var(--font-sans); font-size: var(--text-body); line-height: 1.55; }
-::selection { background: var(--brand); color: var(--brand-foreground); }
-:focus-visible { outline: 2px solid var(--ring); outline-offset: 3px; }
-```
-
-`app/layout.tsx` loads the fonts:
-
-```tsx
-import { Schibsted_Grotesk, IBM_Plex_Mono } from "next/font/google";
-const sans = Schibsted_Grotesk({ subsets: ["latin"], variable: "--font-schibsted", display: "swap" });
-const mono = IBM_Plex_Mono({ subsets: ["latin"], weight: ["400", "500"], variable: "--font-plex-mono", display: "swap" });
-// <html lang="en" className={`${sans.variable} ${mono.variable}`} suppressHydrationWarning>
-```
+- `:root` and `.dark` hold the colour tokens above, under shadcn/ui's variable names (`--background`, `--primary`, `--accent` …) plus our own (`--brand`, `--ink-2`, `--rule-strong`).
+- `@theme inline` maps them to Tailwind colours (`bg-brand`, `text-ink-2`, `border-rule-strong` …), fonts (`font-sans`, `font-mono`) and radii.
+- `@utility type-*` defines the type scale.
+- Fonts load in `app/layout.tsx` with `next/font/google` (`Schibsted_Grotesk` → `--font-schibsted`, `IBM_Plex_Mono` 400/500 → `--font-plex-mono`).
+- The print block at the end turns the page into a two-page résumé (see [`06-interactions.md` §10](06-interactions.md)).

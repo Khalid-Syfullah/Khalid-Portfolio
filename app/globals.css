@@ -1,0 +1,365 @@
+/* Design tokens: docs/design/02-tokens.md is the source of truth. */
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  --background: #f3f3f0;
+  --foreground: #121212;
+  --card: #ffffff;
+  --card-foreground: #121212;
+  --popover: #ffffff;
+  --popover-foreground: #121212;
+  --primary: #121212; /* ink buttons */
+  --primary-foreground: #f3f3f0;
+  --secondary: #eaeae6;
+  --secondary-foreground: #121212;
+  --muted: #eaeae6;
+  --muted-foreground: #5a5a55;
+  --accent: #e6eafb; /* shadcn hover/selected surface */
+  --accent-foreground: #121212;
+  --destructive: #b42318;
+  --border: #d6d6d0;
+  --input: #85857e;
+  --ring: #2747d8;
+  --brand: #2747d8;
+  --brand-foreground: #ffffff;
+  --ink-2: #33332f;
+  --rule-strong: #121212;
+  --radius: 6px;
+  --gutter: clamp(20px, 4vw, 56px);
+  --section-y: clamp(56px, 8vw, 96px);
+  --header-h: 64px;
+  --shadow-pop: 0 24px 48px -24px rgb(18 18 18 / 0.35);
+}
+
+.dark {
+  --background: #0e0e0d;
+  --foreground: #eeede7;
+  --card: #171716;
+  --card-foreground: #eeede7;
+  --popover: #171716;
+  --popover-foreground: #eeede7;
+  --primary: #eeede7;
+  --primary-foreground: #0e0e0d;
+  --secondary: #1d1d1b;
+  --secondary-foreground: #eeede7;
+  --muted: #1d1d1b;
+  --muted-foreground: #9c9b93;
+  --accent: #1c2350;
+  --accent-foreground: #eeede7;
+  --destructive: #f97066;
+  --border: #2b2b28;
+  --input: #6b6b65;
+  --ring: #7c93ff;
+  --brand: #7c93ff;
+  --brand-foreground: #0e0e0d;
+  --ink-2: #c9c8c0;
+  --rule-strong: #eeede7;
+  --shadow-pop: 0 24px 48px -24px rgb(0 0 0 / 0.7);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-brand: var(--brand);
+  --color-brand-foreground: var(--brand-foreground);
+  --color-ink-2: var(--ink-2);
+  --color-rule-strong: var(--rule-strong);
+
+  --font-sans: var(--font-schibsted), "Helvetica Neue", Arial, sans-serif;
+  --font-mono: var(--font-plex-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
+  --font-heading: var(--font-sans);
+
+  --radius-sm: 4px; /* images */
+  --radius-md: 6px; /* buttons, inputs */
+  --radius-lg: 10px; /* menu items, chips */
+  --radius-xl: 14px; /* command menu, dialogs, cards */
+
+  --shadow-pop: var(--shadow-pop);
+  --ease-out-soft: cubic-bezier(0.2, 0, 0, 1);
+  --container-page: 1280px;
+}
+
+
+/* Type scale (docs/design/02-tokens.md). Named type-* rather than text-* so the
+   class merger never mistakes a size for a colour. */
+@utility type-display {
+  font-size: clamp(2.75rem, 1.4rem + 5.2vw, 5.75rem);
+  line-height: 1.02;
+  letter-spacing: -0.035em;
+}
+@utility type-h2 {
+  font-size: clamp(2rem, 1.5rem + 2vw, 3rem);
+  line-height: 1.05;
+  letter-spacing: -0.025em;
+}
+@utility type-h3 {
+  font-size: 1.5rem;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+}
+@utility type-lead {
+  font-size: 1.25rem;
+  line-height: 1.55;
+}
+@utility type-body {
+  font-size: 1.0625rem;
+  line-height: 1.55;
+}
+@utility type-small {
+  font-size: 0.9375rem;
+  line-height: 1.5;
+}
+@utility type-label {
+  font-size: 0.8125rem;
+  line-height: 1.4;
+  letter-spacing: 0.04em;
+}
+@utility type-meta {
+  font-size: 0.875rem;
+  line-height: 1.4;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    @apply font-sans;
+    background: var(--background);
+    color: var(--foreground);
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-size: 1.0625rem;
+    line-height: 1.55;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+  }
+  ::selection {
+    background: var(--brand);
+    color: var(--brand-foreground);
+  }
+  :focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 3px;
+  }
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+  section[id],
+  footer[id] {
+    scroll-margin-top: calc(var(--header-h) + 16px);
+  }
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+  }
+  p {
+    text-wrap: pretty;
+  }
+}
+
+@layer utilities {
+  .tabular {
+    font-variant-numeric: tabular-nums;
+  }
+  .container-page {
+    width: 100%;
+    max-width: var(--container-page);
+    margin-inline: auto;
+    padding-inline: var(--gutter);
+  }
+  /* A fact only Khalid can supply (docs/design/08-content.md). Visible on purpose. */
+  .todo {
+    border: 1px dashed var(--brand);
+    border-radius: var(--radius-md);
+    padding: 0 0.35em;
+    color: var(--brand);
+    background: color-mix(in oklab, var(--brand) 7%, transparent);
+    font-family: var(--font-mono);
+    font-size: 0.85em;
+  }
+  .print-only {
+    display: none;
+  }
+}
+
+/* Hero entrance (docs/design/07-motion.md): CSS, so it runs before hydration
+   and the text never waits for JavaScript. */
+@keyframes intro-rise {
+  from {
+    opacity: 0;
+    transform: translateY(var(--rise, 16px));
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes intro-reveal {
+  from {
+    clip-path: inset(0 0 100% 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+@keyframes intro-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes dot-pulse {
+  0% {
+    box-shadow: 0 0 0 0 color-mix(in oklab, var(--brand) 55%, transparent);
+  }
+  100% {
+    box-shadow: 0 0 0 9px color-mix(in oklab, var(--brand) 0%, transparent);
+  }
+}
+@keyframes intro-slide {
+  from {
+    transform: translateY(16px);
+  }
+  to {
+    transform: none;
+  }
+}
+/* transform only: the headline is the LCP text, so it is never transparent */
+.intro-slide {
+  animation: intro-slide 600ms cubic-bezier(0.2, 0, 0, 1) both;
+  animation-delay: var(--delay, 0ms);
+}
+.intro-rise {
+  animation: intro-rise 600ms cubic-bezier(0.2, 0, 0, 1) both;
+  animation-delay: var(--delay, 0ms);
+}
+.intro-fade {
+  animation: intro-fade 600ms cubic-bezier(0.2, 0, 0, 1) both;
+  animation-delay: var(--delay, 0ms);
+}
+.intro-reveal {
+  animation: intro-reveal 600ms cubic-bezier(0.2, 0, 0, 1) both;
+  animation-delay: var(--delay, 0ms);
+}
+.dot-pulse {
+  animation: dot-pulse 900ms ease-out 700ms 1 both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .intro-rise,
+  .intro-reveal {
+    animation: intro-fade 200ms linear both;
+  }
+  .intro-slide {
+    animation: none;
+  }
+  .intro-fade {
+    animation-duration: 200ms;
+  }
+  .dot-pulse {
+    animation: none;
+  }
+}
+
+/* Print: the page becomes a two-page résumé (docs/design/06-interactions.md §10) */
+@media print {
+  @page {
+    margin: 14mm;
+  }
+  :root,
+  .dark {
+    --background: #ffffff;
+    --foreground: #000000;
+    --ink-2: #222222;
+    --muted-foreground: #444444;
+    --border: #cccccc;
+    --rule-strong: #000000;
+    --brand: #000000;
+  }
+  html {
+    font-size: 9.5pt;
+    scroll-behavior: auto;
+  }
+  body {
+    --gutter: 0px;
+    font-size: 9.5pt !important;
+    line-height: 1.4 !important;
+  }
+  body {
+    background: #fff !important;
+    color: #000 !important;
+  }
+  .print-hide {
+    display: none !important;
+  }
+  .print-only {
+    display: block !important;
+  }
+  section,
+  footer {
+    padding-block: 6pt !important;
+    break-inside: auto;
+  }
+  h2,
+  h3 {
+    break-after: avoid;
+  }
+  a[href^="http"]::after {
+    content: " (" attr(href) ")";
+    font-size: 0.85em;
+    color: #444;
+  }
+  .todo {
+    border: 0;
+    background: none;
+    color: #000;
+  }
+  .type-display {
+    font-size: 22pt !important;
+    line-height: 1.1 !important;
+  }
+  .type-h2 {
+    font-size: 14pt !important;
+  }
+  .type-h3 {
+    font-size: 11.5pt !important;
+  }
+  .type-lead,
+  .type-body {
+    font-size: 9.5pt !important;
+  }
+  a.no-print-url::after {
+    content: none !important;
+  }
+}
