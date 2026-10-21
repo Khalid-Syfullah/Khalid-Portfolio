@@ -3,7 +3,7 @@
 import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
 import { featuredProjects, projectBySlug } from "@/content/projects";
-import { openCase, setUIState, syncCaseFromHash, useUI } from "@/lib/ui-store";
+import { getUIState, openCase, setUIState, syncCaseFromHash, useUI } from "@/lib/ui-store";
 
 // Dialog, drawer and case content load on first open (or when the browser is idle).
 const CaseDialogView = dynamic(() => import("./case-dialog-view").then((m) => m.CaseDialogView), { ssr: false });
@@ -37,6 +37,10 @@ export function CaseDialogHost() {
     if (!slug) return;
     const onKey = (e: KeyboardEvent) => {
       if (e.key !== "ArrowLeft" && e.key !== "ArrowRight") return;
+      // Don't hijack caret movement: the command menu can sit on top of an open case.
+      const target = e.target as HTMLElement | null;
+      const typing = !!target && (target.isContentEditable || ["INPUT", "TEXTAREA", "SELECT"].includes(target.tagName));
+      if (typing || getUIState().commandOpen || e.defaultPrevented) return;
       const i = featuredProjects.findIndex((p) => p.slug === slug);
       if (i < 0) return;
       const j = e.key === "ArrowLeft" ? i - 1 : i + 1;

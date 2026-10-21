@@ -1,0 +1,10 @@
+# Netlify deploy previews for pull requests. Production is AWS Lightsail via
+# GitHub Actions (docs/DEPLOY.md); this only makes PR previews build.
+# The site is a Next.js static export, so Netlify publishes out/.
+[build]
+  command = "npm run build"
+  publish = "out"
+
+[build.environment]
+  NODE_VERSION = "22"
+  NEXT_TELEMETRY_DISABLED = "1"

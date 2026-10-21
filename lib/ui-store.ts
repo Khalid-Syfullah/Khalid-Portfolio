@@ -99,6 +99,17 @@ export function openCase(slug: string) {
   setUIState({ caseSlug: slug });
 }
 
+/**
+ * Leave an open case without touching history: section navigation replaces
+ * the hash itself. Returns true if a case was open.
+ */
+export function dismissCase() {
+  if (getUIState().caseSlug === null) return false;
+  caseHasHistoryEntry = false;
+  setUIState({ caseSlug: null });
+  return true;
+}
+
 export function closeCase() {
   if (caseHasHistoryEntry) {
     window.history.back(); // the host's popstate/hashchange handler clears caseSlug

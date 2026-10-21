@@ -78,6 +78,7 @@ DESIGN.md            design entry point
 
 ## Changelog
 
+- **2026-10-21:** Review fixes on the PR: choosing a section in the command menu now closes an open case and scrolls there; ←/→ no longer step through cases while you're typing in the search box. Added `netlify.toml` so Netlify's PR deploy previews build the static export (`out/`).
 - **2026-10-21:** Next.js site built (PR): every section from the spec, the ⌘K command menu, case dialogs with shareable `#work/<slug>` links, archive filters with skill → project links, deep links, light/dark, print-to-résumé, OG image. Checked with Playwright: 35 interaction checks on desktop and phone, axe 0 violations, Lighthouse desktop 100 across the board. Spec files updated where the build changed details (type-* utilities, CSS-first motion, lazy-loaded overlays).
 - **2026-10-21:** Deploy workflow uses the current artifact actions (`upload-artifact@v7`, `download-artifact@v8`, Node 24). First CI run on `main` passed; the deploy job is skipped until setup.
 - **2026-10-21:** Design spec added (`DESIGN.md` + 9 files in `docs/design/`). Everything academic removed from the plan and content. CI/CD added: build checks on every PR, and Lightsail deploy with atomic releases and automatic rollback (off until setup). README rewritten.
