@@ -1,0 +1,193 @@
+name: Deploy
+
+# Push to main → build the static site → upload it to the AWS Lightsail server
+# over SSH as a new release → switch the "current" symlink → health-check.
+# If the health check fails, the previous release is restored automatically.
+#
+# The deploy job only runs once the repository variable DEPLOY_ENABLED is "true"
+# and the secrets below exist. Setup steps: docs/DEPLOY.md
+#
+# Secrets:   LIGHTSAIL_HOST, LIGHTSAIL_USER, LIGHTSAIL_SSH_KEY, LIGHTSAIL_KNOWN_HOSTS (optional)
+# Variables: DEPLOY_ENABLED ("true" to deploy), DEPLOY_PATH (default /var/www/khalidsyfullah.com),
+#            SITE_URL (default https://khalidsyfullah.com), LIGHTSAIL_PORT (default 22)
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+env:
+  DEPLOY_PATH: ${{ vars.DEPLOY_PATH || '/var/www/khalidsyfullah.com' }}
+  SITE_URL: ${{ vars.SITE_URL || 'https://khalidsyfullah.com' }}
+  SSH_PORT: ${{ vars.LIGHTSAIL_PORT || '22' }}
+  KEEP_RELEASES: "5"
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    outputs:
+      release: ${{ steps.meta.outputs.release }}
+    steps:
+      - name: Check out
+        uses: actions/checkout@v5
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint --if-present
+
+      - name: Test
+        run: npm test --if-present
+        env:
+          CI: "true"
+
+      - name: Build
+        run: npm run build
+        env:
+          CI: "true"
+
+      - name: Prepare release
+        id: meta
+        run: |
+          if [ -d out ]; then dir=out; elif [ -d build ]; then dir=build; else
+            echo "::error::No build output found (expected out/ from Next.js static export)"; exit 1; fi
+          test -f "$dir/index.html" || { echo "::error::$dir/index.html missing"; exit 1; }
+          release="$(date -u +%Y%m%d%H%M%S)-${GITHUB_SHA::7}"
+          printf '%s\n' "$GITHUB_SHA" > "$dir/version.txt"
+          mkdir -p site && cp -a "$dir"/. site/
+          echo "release=$release" >> "$GITHUB_OUTPUT"
+          echo "Release $release from $dir/ ($(du -sh site | cut -f1))"
+
+      - name: Upload site
+        uses: actions/upload-artifact@v4
+        with:
+          name: site
+          path: site
+          retention-days: 7
+          if-no-files-found: error
+
+  deploy:
+    name: Deploy to Lightsail
+    needs: build
+    if: ${{ vars.DEPLOY_ENABLED == 'true' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    environment:
+      name: production
+      url: ${{ vars.SITE_URL || 'https://khalidsyfullah.com' }}
+    env:
+      RELEASE: ${{ needs.build.outputs.release }}
+      HOST: ${{ secrets.LIGHTSAIL_HOST }}
+      USER: ${{ secrets.LIGHTSAIL_USER }}
+    steps:
+      - name: Download site
+        uses: actions/download-artifact@v4
+        with:
+          name: site
+          path: site
+
+      - name: Check secrets
+        env:
+          HAS_KEY: ${{ secrets.LIGHTSAIL_SSH_KEY != '' }}
+        run: |
+          missing=""
+          [ -n "$HOST" ] || missing="$missing LIGHTSAIL_HOST"
+          [ -n "$USER" ] || missing="$missing LIGHTSAIL_USER"
+          [ "$HAS_KEY" = "true" ] || missing="$missing LIGHTSAIL_SSH_KEY"
+          if [ -n "$missing" ]; then echo "::error::Missing secrets:$missing (see docs/DEPLOY.md)"; exit 1; fi
+
+      - name: Set up SSH
+        env:
+          SSH_KEY: ${{ secrets.LIGHTSAIL_SSH_KEY }}
+          KNOWN_HOSTS: ${{ secrets.LIGHTSAIL_KNOWN_HOSTS }}
+        run: |
+          install -m 700 -d ~/.ssh
+          printf '%s\n' "$SSH_KEY" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          if [ -n "$KNOWN_HOSTS" ]; then
+            printf '%s\n' "$KNOWN_HOSTS" > ~/.ssh/known_hosts
+          else
+            echo "::warning::LIGHTSAIL_KNOWN_HOSTS not set; trusting the host key found now (set it to pin the key)"
+            ssh-keyscan -p "$SSH_PORT" -H "$HOST" > ~/.ssh/known_hosts 2>/dev/null
+          fi
+          chmod 600 ~/.ssh/known_hosts
+          cat > ~/.ssh/config <<EOF
+          Host lightsail
+            HostName $HOST
+            User $USER
+            Port $SSH_PORT
+            IdentityFile ~/.ssh/deploy_key
+            IdentitiesOnly yes
+            StrictHostKeyChecking yes
+            ServerAliveInterval 15
+          EOF
+
+      - name: Upload release
+        run: |
+          # shellcheck disable=SC2029  # values are meant to expand on the runner
+          ssh lightsail "mkdir -p '$DEPLOY_PATH/releases/$RELEASE'"
+          rsync -az --delete --chmod=D755,F644 -e ssh site/ "lightsail:$DEPLOY_PATH/releases/$RELEASE/"
+
+      - name: Switch to the new release
+        run: |
+          # shellcheck disable=SC2029  # values are meant to expand on the runner
+          ssh lightsail "DEPLOY_PATH='$DEPLOY_PATH' RELEASE='$RELEASE' KEEP='$KEEP_RELEASES' bash -s" <<'REMOTE'
+          set -euo pipefail
+          cd "$DEPLOY_PATH"
+          if [ -L current ]; then readlink current > .previous; else : > .previous; fi
+          ln -sfn "releases/$RELEASE" current.tmp
+          mv -Tf current.tmp current
+          echo "current -> $(readlink current)"
+          # keep the newest $KEEP releases, never the live one or the previous one
+          live="$(readlink current)"; prev="$(cat .previous)"
+          ls -1dt releases/*/ 2>/dev/null | sed 's:/$::' | tail -n +"$((KEEP + 1))" | while read -r old; do
+            [ "$old" = "$live" ] || [ "$old" = "$prev" ] || rm -rf -- "$old"
+          done
+          REMOTE
+
+      - name: Health check
+        id: health
+        run: |
+          for i in 1 2 3 4 5 6; do
+            live="$(curl -fsS --max-time 10 "$SITE_URL/version.txt?ts=$(date +%s)" || true)"
+            if [ "$live" = "$GITHUB_SHA" ]; then echo "Live: $SITE_URL serves $GITHUB_SHA"; exit 0; fi
+            echo "Attempt $i: got '${live:-nothing}', waiting…"; sleep 5
+          done
+          echo "::error::$SITE_URL is not serving $GITHUB_SHA"
+          exit 1
+
+      - name: Roll back on failure
+        if: ${{ failure() && steps.health.conclusion == 'failure' }}
+        run: |
+          # shellcheck disable=SC2029  # values are meant to expand on the runner
+          ssh lightsail "DEPLOY_PATH='$DEPLOY_PATH' bash -s" <<'REMOTE'
+          set -euo pipefail
+          cd "$DEPLOY_PATH"
+          prev="$(cat .previous 2>/dev/null || true)"
+          if [ -n "$prev" ] && [ -d "$prev" ]; then
+            ln -sfn "$prev" current.tmp && mv -Tf current.tmp current
+            echo "Rolled back: current -> $prev"
+          else
+            echo "No previous release to roll back to"
+          fi
+          REMOTE
+
+      - name: Clean up key
+        if: ${{ always() }}
+        run: rm -f ~/.ssh/deploy_key

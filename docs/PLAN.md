@@ -15,6 +15,10 @@ No phase starts until the one before it is signed off. That's the rule from the 
 - **Positioning: Software Engineer.** The site is for Khalid himself.
 - **No kernel / Chimera OS work** on the site.
 - **No Research section** (papers removed) and **no Blog**.
+- **Everything academic is deleted:** IELTS/GRE, transcripts, certificates, HSC/SSC, CGPA, student leadership and research-only projects. The B.Sc. degree stays as one line; Coursera certifications and project awards stay.
+- **Design is documented** as `DESIGN.md` plus separate spec files in `docs/design/` (tokens, layout, sections, components, interactions, motion, content, quality).
+- **CI/CD** is GitHub Actions (`ci.yml`, `deploy.yml`) deploying to Lightsail. See `docs/DEPLOY.md`.
+- **README.md is updated with every push.**
 - **Photos:** use the two portraits from the current site (square headshot and the outdoor photo).
 - **Hosting: AWS Lightsail.** Build a **new CI/CD** from scratch.
 - **The old site is scrapped completely.** No backup and no fallback; the new build replaces it at deploy.
@@ -96,7 +100,7 @@ Combine **layout 2 (Swiss résumé grid)** for experience, education and researc
 
 **Suggested featured projects (confirm at design review):** BOIMELA, VFloors360, PLASMA+ (IEEE YESIST12 winner) and OBOSOR (Qubitech). Everything else goes in the archive.
 
-**Proposed cuts (confirm at design review):** IELTS/GRE scores and the academic-document drawer (certificates, transcripts) are academic material, like the papers. The plan drops them and keeps only a résumé download.
+**Cut (confirmed 21 Oct):** all academic material (IELTS/GRE, certificates, transcripts, HSC/SSC, CGPA, papers). Only a résumé download remains. Full content: `docs/design/08-content.md`.
 
 ---
 
@@ -139,16 +143,18 @@ Combine **layout 2 (Swiss résumé grid)** for experience, education and researc
 |---|---|---|
 | 1 Research | §1–2 of this doc | ✅ done |
 | 2 Plan | This doc | ✅ answered 21 Oct |
-| 3 Design | 3 visual directions (hero plus Experience), then the full page in the chosen direction: desktop and mobile, light and dark | Khalid picks a direction |
+| 3 Design | 3 visual directions on the design canvas, then the design spec: `DESIGN.md` + `docs/design/01–09` (base A · Résumé Sheet, C's command menu, B's dark ground) | Khalid approves the spec |
 | 4 Review | Revision rounds on the full design | Khalid signs off |
 | 5 Build | Next.js replaces CRA; content files, sections, interactions; delivered as a PR to `main` | PR reviewed |
 | 6 Optimize | Lighthouse, accessibility and SEO pass against §7, with a report | Targets met |
-| 7 Deploy | New GitHub Actions workflow: on push to `main`, build the static site and deploy it over SSH (rsync) to the Lightsail instance's Nginx web root. The old site is removed completely and khalidsyfullah.com points at the new build | Khalid approves the cut-over |
+| 7 Deploy | GitHub Actions (`deploy.yml`, **already in the repo, switched off**): on push to `main`, build, upload over SSH to Lightsail as a new release, switch the `current` symlink, health-check, roll back on failure. Then `setup-server.sh remove-old` deletes the old site | Khalid approves the cut-over |
 
 ---
 
 ## 9. Deploy prerequisites (needed before Phase 7)
 
-1. **Lightsail details:** instance name/region and static IP, SSH username, and whether Nginx already serves khalidsyfullah.com there (HTTPS via Let's Encrypt?).
-2. **Deploy key:** a dedicated SSH key pair for GitHub Actions. The public key goes on the instance and the private key goes in the repo's Actions secrets (`LIGHTSAIL_HOST`, `LIGHTSAIL_USER`, `LIGHTSAIL_SSH_KEY`). Khalid adds the secret himself.
+The full steps are in [`DEPLOY.md`](DEPLOY.md).
+
+1. **Server:** the live site is nginx 1.24 on Ubuntu at 52.65.31.165. Run `deploy/setup-server.sh prepare` once.
+2. **Deploy key and secrets:** Khalid generates the key and adds `LIGHTSAIL_HOST`, `LIGHTSAIL_USER`, `LIGHTSAIL_SSH_KEY` (plus optionally `LIGHTSAIL_KNOWN_HOSTS`), then sets `DEPLOY_ENABLED=true`.
 3. **Résumé PDF:** the software-engineering résumé to link from the site (the old site linked the 4-page academic CV).

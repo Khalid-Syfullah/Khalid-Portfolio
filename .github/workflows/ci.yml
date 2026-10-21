@@ -1,0 +1,55 @@
+name: CI
+
+# Builds every pull request and every push to a branch other than main.
+# (main is built by deploy.yml, which runs the same steps before deploying.)
+
+on:
+  pull_request:
+  push:
+    branches-ignore: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Install, lint, test, build
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Check out
+        uses: actions/checkout@v5
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint --if-present
+
+      - name: Test
+        run: npm test --if-present
+        env:
+          CI: "true"
+
+      - name: Build
+        run: npm run build
+        env:
+          CI: "true"
+
+      - name: Check build output
+        run: |
+          if [ -d out ]; then dir=out; elif [ -d build ]; then dir=build; else
+            echo "::error::No build output found (expected out/ from Next.js static export)"; exit 1; fi
+          test -f "$dir/index.html" || { echo "::error::$dir/index.html missing"; exit 1; }
+          echo "Build output: $dir ($(du -sh "$dir" | cut -f1))"
