@@ -75,7 +75,7 @@ jobs:
           echo "Release $release from $dir/ ($(du -sh site | cut -f1))"
 
       - name: Upload site
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: site
           path: site
@@ -97,7 +97,7 @@ jobs:
       USER: ${{ secrets.LIGHTSAIL_USER }}
     steps:
       - name: Download site
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: site
           path: site

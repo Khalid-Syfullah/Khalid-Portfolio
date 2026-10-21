@@ -68,6 +68,7 @@ npm run build    # production build
 
 ## Changelog
 
+- **2026-10-21:** Deploy workflow uses the current artifact actions (`upload-artifact@v7`, `download-artifact@v8`, Node 24). First CI run on `main` passed; the deploy job is skipped until setup.
 - **2026-10-21:** Design spec added (`DESIGN.md` + 9 files in `docs/design/`). Everything academic removed from the plan and content. CI/CD added: build checks on every PR, and Lightsail deploy with atomic releases and automatic rollback (off until setup). README rewritten.
 - **2026-10-21:** `docs/PLAN.md` added: research on the reference galleries and the old site, decisions, and the phased plan.
 - **2026-04-24:** Initial commit (Create React App scaffold).
