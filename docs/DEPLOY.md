@@ -1,123 +1,107 @@
 # Deploy (CI/CD)
 
-How khalidsyfullah.com gets from this repo to the AWS Lightsail server.
+How khalidsyfullah.com gets from this repo to the web. The site is a static export, and Cloudflare serves it for free from its edge network. No server is involved.
 
 ```
- git push main
-      │
-      ▼
- ┌──────────────── GitHub Actions: deploy.yml ────────────────┐
- │ build job                    deploy job (needs build)      │
- │  npm ci → lint → test →      only if DEPLOY_ENABLED=true   │
- │  npm run build → out/   ──▶  rsync out/ → releases/<id>/   │
- │  + version.txt (git SHA)     switch current → releases/<id>│
- │  upload artifact "site"      curl /version.txt == SHA ?    │
- │                               ├─ yes → done ✔               │
- │                               └─ no  → roll back to previous│
- └────────────────────────────────────────────────────────────┘
-      │ SSH (deploy user, key in GitHub secrets)
-      ▼
- ┌──────── Lightsail · Ubuntu · nginx 1.24 · 52.65.31.165 ────────┐
- │ /var/www/khalidsyfullah.com/                                   │
- │   releases/20261021083000-8b1fd38/   ← one folder per deploy   │
- │   releases/20261022101500-1a2b3c4/                             │
- │   current → releases/20261022101500-1a2b3c4   (atomic symlink) │
- │ nginx root = /var/www/khalidsyfullah.com/current               │
- └────────────────────────────────────────────────────────────────┘
+ push / PR ─────────────┬──────────────────────────────────────────────┐
+                        ▼                                              ▼
+ ┌──── GitHub Actions: ci.yml ────┐        ┌──── Cloudflare Workers Builds ────────────┐
+ │ npm ci → lint → test → build   │        │ main:  npm run build → npx wrangler deploy │
+ │ → wrangler deploy --dry-run    │        │ other branches: preview build + URL        │
+ │ (checks only, uploads nothing) │        │ status shows as a check on the commit/PR   │
+ └────────────────────────────────┘        └────────────────────┬──────────────────────┘
+                                                                ▼
+                                   ┌──── Worker "khalid-portfolio" (static assets only) ────┐
+                                   │ serves out/ · _headers · 404.html                       │
+                                   │ custom domains: khalidsyfullah.com, www (→ 301 to apex) │
+                                   └─────────────────────────────────────────────────────────┘
 ```
 
-- **`ci.yml`** builds every pull request and non-main branch (install → lint → test → build).
-- **`deploy.yml`** runs on every push to `main` (or by hand from the Actions tab). The last 5 releases are kept, and a failed health check rolls back automatically.
-- **The deploy job is switched off until setup is done.** It only runs when the repository variable `DEPLOY_ENABLED` is `true`. Until then pushes are built and checked, but not deployed.
-- Only the **khalidsyfullah.com** site is touched. Mail, other domains and other nginx sites on the server are left alone.
+- **What runs where:** `ci.yml` checks every push and PR. Cloudflare's own builder (Workers Builds, connected to this repo) deploys `main`. A deploy doesn't need any GitHub secret or API token.
+- **Config in the repo:**
+  - `wrangler.jsonc`: an assets-only Worker serving `out/`. It uses the 404 page for unknown paths and handles trailing slashes automatically.
+  - `public/_headers`: security headers on every response, `immutable` caching for `/_next/static/*` and one week for `/images/*`.
+  - `.node-version`: pins Node 22 for the builder, the same version CI uses.
+- **Cost:** Workers Free plan. Requests for static assets are free and unlimited. A version can hold up to 20,000 files of up to 25 MiB each; this site has about 85 files.
+- **Rollback:** go to Workers & Pages → `khalid-portfolio` → Deployments, open an earlier version and choose **Rollback**. Or revert the commit on `main`.
+
+## Local check
+
+```bash
+npm run build
+npx wrangler dev            # serves out/ with Cloudflare's runtime at http://localhost:8787
+npx wrangler deploy --dry-run
+```
 
 ## One-time setup
 
-Do this once, **after the new Next.js site is merged to `main`** (Phase 7 in [`PLAN.md`](PLAN.md)). Enabling it earlier would deploy the old Create React App placeholder.
+### 1. Add the domain to Cloudflare (DNS moves from Namecheap)
 
-### 1. Make a deploy key (on your Mac)
+1. In the Cloudflare dashboard, go to **Add a domain**, enter `khalidsyfullah.com` and pick the **Free** plan. Cloudflare imports the existing DNS records.
+2. Check the imported records against the table below before changing nameservers. Everything that isn't the website must keep working, and mail records can't be proxied.
+3. At Namecheap, open **Domain List** → khalidsyfullah.com → **Nameservers**, choose **Custom DNS** and enter the two nameservers Cloudflare shows. Save.
+4. Wait until Cloudflare shows the domain as **Active**. That's usually minutes, but it can take up to 24 hours.
 
-```bash
-ssh-keygen -t ed25519 -C "github-actions@khalid-portfolio" -f ~/.ssh/khalid_portfolio_deploy -N ""
-cat ~/.ssh/khalid_portfolio_deploy.pub     # public key → server (step 2)
-cat ~/.ssh/khalid_portfolio_deploy         # private key → GitHub secret (step 3)
-```
+#### DNS records to keep
 
-### 2. Prepare the server (SSH into the Lightsail instance)
+| Name | Type | Value | Proxy |
+|---|---|---|---|
+| `n8n` | A | 13.55.18.232 (EC2) | DNS only |
+| `production` | A | 13.55.18.232 (EC2) | DNS only |
+| `webmail` | A | 52.65.31.165 (Lightsail) | DNS only. Remove when the Lightsail instance goes |
+| `@` | MX | 10 `mx01.mail.icloud.com` | — |
+| `@` | MX | 10 `mx02.mail.icloud.com` | — |
+| `@` | TXT | `v=spf1 … include:icloud.com ~all` | — |
+| `@` | TXT | `apple-domain=…`, `google-site-verification=…`, `brevo-code:…` | — |
+| `mail` | TXT | `brevo-code:…` | — |
+| `sig1._domainkey` | CNAME | `sig1.dkim.khalidsyfullah.com.at.icloudmailadmin.com` | DNS only |
+| `brevo1._domainkey` | CNAME | `b1.khalidsyfullah-com.dkim.brevo.com` | DNS only |
+| `brevo2._domainkey` | CNAME | `b2.khalidsyfullah-com.dkim.brevo.com` | DNS only |
+| `_dmarc` | TXT | `v=DMARC1; p=none; rua=mailto:rua@dmarc.brevo.com` | — |
 
-```bash
-mkdir -p ~/portfolio-deploy/nginx && cd ~/portfolio-deploy
-curl -fsSLO https://raw.githubusercontent.com/Khalid-Syfullah/khalid-portfolio/main/deploy/setup-server.sh
-curl -fsSL -o nginx/khalidsyfullah.com.conf https://raw.githubusercontent.com/Khalid-Syfullah/khalid-portfolio/main/deploy/nginx/khalidsyfullah.com.conf
-sudo bash setup-server.sh prepare "$(cat <<'KEY'
-ssh-ed25519 AAAA…paste the .pub line here… github-actions@khalid-portfolio
-KEY
-)"
-```
+The old `@` and `www` A records (52.65.31.165, Lightsail) are replaced when the Worker gets the custom domains in step 3.
 
-The script:
-1. installs `rsync` if missing;
-2. creates a `deploy` user that can log in only with that key (no forwarding);
-3. finds the current khalidsyfullah.com nginx config and its web root, and asks you to confirm;
-4. creates `/var/www/khalidsyfullah.com/releases` and points `current` at the **old** site for now, so nothing goes down;
-5. backs up the old nginx config to `/root/nginx-backup-<date>/`, installs `deploy/nginx/khalidsyfullah.com.conf`, runs `nginx -t` and reloads. If the test fails, it restores the old config automatically.
+### 2. Connect the repo (Workers Builds)
 
-It stops without changing anything if the old config file also serves other host names (for example `mail.khalidsyfullah.com`). In that case, split that file by hand first.
+1. Go to **Workers & Pages** → **Create** → **Import a repository**. Connect GitHub and give the Cloudflare app access to **only** `Khalid-Syfullah/khalid-portfolio`.
+2. Project settings:
 
-Also check that the Lightsail firewall allows SSH (port 22) from anywhere. GitHub's runners don't have fixed IPs.
+   | Setting | Value |
+   |---|---|
+   | Project name | `khalid-portfolio` (must match `name` in `wrangler.jsonc`) |
+   | Production branch | `main` |
+   | Build command | `npm run build` |
+   | Deploy command | `npx wrangler deploy` |
+   | Root directory | `/` |
+   | Builds for non-production branches | On (preview URLs for PRs) |
 
-### 3. Add secrets and variables in GitHub
+3. Save and deploy. The first build publishes the site at `khalid-portfolio.<account>.workers.dev`.
 
-Repo → **Settings → Secrets and variables → Actions**
+### 3. Custom domains
 
-| Kind | Name | Value |
-|---|---|---|
-| Secret | `LIGHTSAIL_HOST` | `52.65.31.165` (the instance's static IP) |
-| Secret | `LIGHTSAIL_USER` | `deploy` |
-| Secret | `LIGHTSAIL_SSH_KEY` | the whole private key file from step 1 |
-| Secret (optional) | `LIGHTSAIL_KNOWN_HOSTS` | output of `ssh-keyscan -H 52.65.31.165` (pins the server key) |
-| Variable | `DEPLOY_PATH` | `/var/www/khalidsyfullah.com` (default) |
-| Variable | `SITE_URL` | `https://khalidsyfullah.com` (default) |
-| Variable | `DEPLOY_ENABLED` | `true`. Set this last; it switches deploys on. |
+1. In the Worker, open **Settings** → **Domains & Routes** → **Add** → **Custom domain**. Add `khalidsyfullah.com`, then `www.khalidsyfullah.com`. Cloudflare creates the DNS records and the certificates.
+2. Redirect `www` to the apex: **Rules** → **Redirect Rules** → **Create**, using the "Redirect from WWW to root" template (301, keep the path and query string).
+3. **SSL/TLS** → **Edge Certificates**: turn on **Always Use HTTPS**.
 
-The same thing with the GitHub CLI:
+### 4. Check
 
-```bash
-gh secret set LIGHTSAIL_HOST -b "52.65.31.165"
-gh secret set LIGHTSAIL_USER -b "deploy"
-gh secret set LIGHTSAIL_SSH_KEY < ~/.ssh/khalid_portfolio_deploy
-ssh-keyscan -H 52.65.31.165 | gh secret set LIGHTSAIL_KNOWN_HOSTS
-gh variable set DEPLOY_ENABLED -b "true"
-```
+- `https://khalidsyfullah.com` loads the new site, and `https://www.khalidsyfullah.com/x` redirects to `https://khalidsyfullah.com/x`.
+- `curl -sI https://khalidsyfullah.com` shows the headers from `public/_headers`.
+- Mail still works: send a message to and from the iCloud address. The MX, SPF, DKIM and DMARC records resolve as before (`dig MX khalidsyfullah.com`).
+- `n8n.khalidsyfullah.com` and `production.khalidsyfullah.com` still reach the EC2 server.
+- PageSpeed Insights on the live URL.
 
-### 4. First deploy, then remove the old site
+## After the cut-over
 
-1. Actions → **Deploy** → **Run workflow** (or push to `main`).
-2. When it's green, the new site is live.
-3. On the server, delete the old site for good (the brief: no backup):
-   ```bash
-   sudo bash ~/portfolio-deploy/setup-server.sh remove-old
-   ```
-
-## Day to day
-
-- **Deploy:** merge to `main`. That's it.
-- **Check what's live:** `curl https://khalidsyfullah.com/version.txt` prints the deployed commit SHA.
-- **Roll back by hand:**
-  ```bash
-  ssh deploy@52.65.31.165
-  cd /var/www/khalidsyfullah.com && ls -1t releases/       # pick a release
-  ln -sfn releases/<id> current.tmp && mv -Tf current.tmp current
-  ```
-  Or re-run an older successful Deploy run from the Actions tab.
-- **Pause deploys:** set `DEPLOY_ENABLED` to `false`.
+- The old site on the Lightsail instance (`OpenClaw-1`, 52.65.31.165) no longer gets traffic for khalidsyfullah.com. Before stopping or deleting the instance, check what else runs on it (webmail and any other sites). Deleting it is Khalid's call, done by him.
+- When Cloudflare preview builds are on, Netlify's PR previews (`netlify.toml`) can be disconnected.
 
 ## Troubleshooting
 
 | Symptom | Fix |
 |---|---|
-| `Missing secrets` | Add the secrets from step 3 |
-| `Permission denied (publickey)` | The public key isn't in `/home/deploy/.ssh/authorized_keys`, or the wrong private key is in the secret |
-| `Host key verification failed` | Update `LIGHTSAIL_KNOWN_HOSTS` (the server was rebuilt, or the IP changed) |
-| Health check fails | Is nginx's root `/var/www/khalidsyfullah.com/current`? Run `sudo nginx -T \| grep -A3 "server_name khalidsyfullah.com"` |
-| SSH times out | Lightsail firewall: allow TCP 22 from `0.0.0.0/0` |
+| Build fails with an unsupported Node version | Check that `.node-version` is in the repo root. You can also set `NODE_VERSION=22` under Settings → Build → Variables |
+| `A Worker with this name already exists` or the wrong Worker deploys | The project name in the dashboard must equal `name` in `wrangler.jsonc` |
+| Custom domain stuck on "Initializing" | The domain isn't Active on Cloudflare yet (nameservers still at Namecheap) |
+| Mail stops arriving | An MX/DKIM record is missing or proxied. Compare against the table above; DKIM CNAMEs must be DNS only |
+| Old site still shows | DNS cache. Check `dig +short khalidsyfullah.com` (it should return Cloudflare IPs) and try a private window |

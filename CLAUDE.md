@@ -10,7 +10,7 @@ khalidsyfullah.com: Md Khalid Syfullah's single-page portfolio (Software Enginee
 - **Tokens only.** Colours, sizes and durations come from `docs/design/02-tokens.md` (CSS variables). No raw hex in components.
 - **Content only from `docs/design/08-content.md`** (later `content/*.ts`). Never invent facts; mark unknowns `[KHALID: …]`.
 - **No academic content:** papers, IELTS/GRE, transcripts, certificates, HSC/SSC, CGPA, student leadership. No kernel / Chimera OS work and no blog.
-- **Deploys** go through GitHub Actions to AWS Lightsail (`docs/DEPLOY.md`). Never deploy by hand. Never touch other sites, mail or other config on that server.
+- **Deploys** happen through Cloudflare Workers Builds when `main` changes (`docs/DEPLOY.md`). Never deploy by hand with `wrangler deploy`. The domain's DNS lives on Cloudflare, so leave the mail, DKIM and EC2 (`n8n`, `production`) records alone.
 
 ## Code notes
 

@@ -17,10 +17,10 @@ No phase starts until the one before it is signed off. That's the rule from the 
 - **No Research section** (papers removed) and **no Blog**.
 - **Everything academic is deleted:** IELTS/GRE, transcripts, certificates, HSC/SSC, CGPA, student leadership and research-only projects. The B.Sc. degree stays as one line; Coursera certifications and project awards stay.
 - **Design is documented** as `DESIGN.md` plus separate spec files in `docs/design/` (tokens, layout, sections, components, interactions, motion, content, quality).
-- **CI/CD** is GitHub Actions (`ci.yml`, `deploy.yml`) deploying to Lightsail. See `docs/DEPLOY.md`.
+- **CI/CD:** GitHub Actions (`ci.yml`) checks every push and PR. Cloudflare Workers Builds deploys `main`. See `docs/DEPLOY.md`.
 - **README.md is updated with every push.**
 - **Photos:** use the two portraits from the current site (square headshot and the outdoor photo).
-- **Hosting: AWS Lightsail.** Build a **new CI/CD** from scratch.
+- **Hosting: Cloudflare (free), not AWS Lightsail.** Khalid switched on 21 Oct 2026. The static export is served as Workers static assets, and DNS moves from Namecheap to Cloudflare. Build a **new CI/CD** from scratch.
 - **The old site is scrapped completely.** No backup and no fallback; the new build replaces it at deploy.
 
 ---
@@ -118,7 +118,7 @@ Combine **layout 2 (Swiss résumé grid)** for experience, education and researc
 
 ## 6. Stack
 
-- **Next.js** (latest stable, App Router, TypeScript) with `output: 'export'` for a static build served by Nginx on the AWS Lightsail instance.
+- **Next.js** (latest stable, App Router, TypeScript) with `output: 'export'` for a static build served as Cloudflare Workers static assets.
 - **Tailwind CSS v4** and **shadcn/ui** (Command, Sheet, Tabs, Tooltip, Badge, Button).
 - **Motion** (the current name of Framer Motion; `motion/react`) for transitions and layout animation.
 - **next-themes**, **lucide-react** (UI icons) and simple-icons or react-icons (brand marks: GitHub, LinkedIn, Scholar, LeetCode).
@@ -145,9 +145,9 @@ Combine **layout 2 (Swiss résumé grid)** for experience, education and researc
 | 2 Plan | This doc | ✅ answered 21 Oct |
 | 3 Design | 3 visual directions on the design canvas, then the design spec: `DESIGN.md` + `docs/design/01–09` (base A · Résumé Sheet, C's command menu, B's dark ground) | ✅ approved 21 Oct |
 | 4 Review | Revision rounds on the full design | ✅ signed off 21 Oct |
-| 5 Build | Next.js replaces CRA; content files, sections, interactions; delivered as a PR to `main` | 🟡 PR open, waiting for review |
-| 6 Optimize | Lighthouse, accessibility and SEO pass against §7, with a report | 🟡 done in the same PR (desktop 100; see `design/09-quality.md`) |
-| 7 Deploy | GitHub Actions (`deploy.yml`, **already in the repo, switched off**): on push to `main`, build, upload over SSH to Lightsail as a new release, switch the `current` symlink, health-check, roll back on failure. Then `setup-server.sh remove-old` deletes the old site | Khalid approves the cut-over |
+| 5 Build | Next.js replaces CRA; content files, sections, interactions; delivered as a PR to `main` | ✅ merged (PR #1) |
+| 6 Optimize | Lighthouse, accessibility and SEO pass against §7, with a report | ✅ merged with PR #1 (desktop 100; see `design/09-quality.md`) |
+| 7 Deploy | Cloudflare: `wrangler.jsonc` (assets-only Worker) and `public/_headers` in the repo. Workers Builds deploys every push to `main`; `ci.yml` checks every push and PR. DNS moves to Cloudflare; mail and EC2 records are kept | Khalid approved the switch to Cloudflare, 21 Oct |
 
 ---
 
@@ -155,6 +155,7 @@ Combine **layout 2 (Swiss résumé grid)** for experience, education and researc
 
 The full steps are in [`DEPLOY.md`](DEPLOY.md).
 
-1. **Server:** the live site is nginx 1.24 on Ubuntu at 52.65.31.165. Run `deploy/setup-server.sh prepare` once.
-2. **Deploy key and secrets:** Khalid generates the key and adds `LIGHTSAIL_HOST`, `LIGHTSAIL_USER`, `LIGHTSAIL_SSH_KEY` (plus optionally `LIGHTSAIL_KNOWN_HOSTS`), then sets `DEPLOY_ENABLED=true`.
-3. **Résumé PDF:** the software-engineering résumé to link from the site (the old site linked the 4-page academic CV).
+1. **Cloudflare account and zone:** add khalidsyfullah.com on the Free plan and check the imported DNS records (mail, DKIM and EC2 records stay; none of them proxied).
+2. **Nameservers:** at Namecheap, switch to the two Cloudflare nameservers.
+3. **Workers Builds:** connect the repo (Cloudflare's GitHub app, limited to this repo), then attach the custom domains `khalidsyfullah.com` and `www`.
+4. **Résumé PDF:** the software-engineering résumé to link from the site (the old site linked the 4-page academic CV).
