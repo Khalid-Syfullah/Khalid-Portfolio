@@ -1,5 +1,6 @@
-# Netlify deploy previews for pull requests. Production is AWS Lightsail via
-# GitHub Actions (docs/DEPLOY.md); this only makes PR previews build.
+# Netlify deploy previews for pull requests. Production is Cloudflare
+# (docs/DEPLOY.md); this only makes PR previews build. Remove once
+# Cloudflare preview builds replace it.
 # The site is a Next.js static export, so Netlify publishes out/.
 [build]
   command = "npm run build"

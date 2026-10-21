@@ -1,12 +1,12 @@
 name: CI
 
-# Builds every pull request and every push to a branch other than main.
-# (main is built by deploy.yml, which runs the same steps before deploying.)
+# Builds every pull request and every push (main included).
+# Deploys are separate: Cloudflare Workers Builds builds and deploys main
+# on its own (docs/DEPLOY.md). This workflow checks the same build works.
 
 on:
   pull_request:
   push:
-    branches-ignore: [main]
   workflow_dispatch:
 
 permissions:
@@ -53,3 +53,9 @@ jobs:
             echo "::error::No build output found (expected out/ from Next.js static export)"; exit 1; fi
           test -f "$dir/index.html" || { echo "::error::$dir/index.html missing"; exit 1; }
           echo "Build output: $dir ($(du -sh "$dir" | cut -f1))"
+
+      - name: Check Cloudflare config
+        # Validates wrangler.jsonc against out/ without uploading anything.
+        run: npx wrangler deploy --dry-run
+        env:
+          WRANGLER_SEND_METRICS: "false"
